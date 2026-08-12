@@ -104,7 +104,7 @@ ebserh/
    mvn spring-boot:run -Dspring-boot.run.profiles=prod
    ```
 
-   O backend será iniciado em `http://localhost:8080`
+   O backend será iniciado em `http://localhost:8081` (ou outra porta se a 8081 estiver em uso)
 
 ### Configuração do Frontend
 
@@ -129,8 +129,8 @@ ebserh/
 
 Uma vez que o backend esteja rodando, acesse a documentação interativa da API:
 
-- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
-- **OpenAPI JSON**: `http://localhost:8080/api-docs`
+- **Swagger UI**: `http://localhost:8081/swagger-ui.html`
+- **OpenAPI JSON**: `http://localhost:8081/api-docs`
 
 ### Endpoints da API
 
@@ -148,7 +148,7 @@ Uma vez que o backend esteja rodando, acesse a documentação interativa da API:
 
 **Criar um paciente:**
 ```bash
-curl -X POST http://localhost:8080/api/patients \
+curl -X POST http://localhost:8081/api/patients \
   -H "Content-Type: application/json" \
   -d '{
     "name": "João Silva",
@@ -163,12 +163,12 @@ curl -X POST http://localhost:8080/api/patients \
 
 **Obter todos os pacientes:**
 ```bash
-curl http://localhost:8080/api/patients?page=0&size=10&sort=name&direction=asc
+curl http://localhost:8081/api/patients
 ```
 
 **Atualizar um paciente:**
 ```bash
-curl -X PUT http://localhost:8080/api/patients/1 \
+curl -X PUT http://localhost:8081/api/patients/1 \
   -H "Content-Type: application/json" \
   -d '{
     "name": "João Silva Atualizado",
@@ -204,7 +204,7 @@ O frontend pode ser testado manualmente através da interface ou adicionando tes
 ### Desenvolvimento (H2)
 - Banco de dados em memória para desenvolvimento e testes
 - Criado automaticamente e populado com dados de exemplo
-- Acesso ao Console H2: `http://localhost:8080/h2-console`
+- Acesso ao Console H2: `http://localhost:8081/h2-console`
   - JDBC URL: `jdbc:h2:mem:patientdb`
   - Usuário: `sa`
   - Senha: (vazia)

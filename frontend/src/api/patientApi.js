@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = '/api/patients';
+const API_BASE_URL = 'http://localhost:8081/api/patients';
 
 const patientApi = {
   getAllPatients: async (page = 0, size = 10, sort = 'name', direction = 'asc') => {
