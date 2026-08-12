@@ -13,7 +13,7 @@
     </parent>
 
     <groupId>com.ebserh</groupId>
-    <artifactId>patient-api</artifactId>
+    <artifactId>patientapi</artifactId>
     <version>1.0.0</version>
     <name>Patient API</name>
     <description>CRUD API for patient management</description>
@@ -46,12 +46,6 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-database-postgresql</artifactId>
-            <version>9.22.3</version>
         </dependency>
 
         <dependency>

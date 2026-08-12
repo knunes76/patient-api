@@ -172,8 +172,6 @@ class PatientServiceTest {
         patientDTO.setName("John Updated");
 
         when(patientRepository.findById(1L)).thenReturn(Optional.of(existingPatient));
-        when(patientRepository.existsByCpf(anyString())).thenReturn(false);
-        when(patientRepository.existsByEmail(anyString())).thenReturn(false);
         when(patientRepository.save(any(Patient.class))).thenReturn(existingPatient);
 
         PatientResponseDTO result = patientService.updatePatient(1L, patientDTO);

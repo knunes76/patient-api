@@ -9,10 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -112,17 +108,13 @@ class PatientControllerTest {
         patient2.setPhone("11912345678");
         patient2.setBirthDate(LocalDate.of(1985, 5, 15));
 
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<PatientResponseDTO> patientPage = new PageImpl<>(Arrays.asList(patientResponseDTO, patient2));
+        List<PatientResponseDTO> patients = Arrays.asList(patientResponseDTO, patient2);
+        when(patientService.getAllPatients()).thenReturn(patients);
 
-        when(patientService.getAllPatients(any(Pageable.class))).thenReturn(patientPage);
-
-        mockMvc.perform(get("/api/patients")
-                        .param("page", "0")
-                        .param("size", "10"))
+        mockMvc.perform(get("/api/patients"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content.length()").value(2));
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(2));
     }
 
     @Test

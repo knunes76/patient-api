@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,20 +66,12 @@ public class PatientController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all patients", description = "Retrieves a paginated list of all patients")
+    @Operation(summary = "Get all patients", description = "Retrieves a list of all patients")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Patients retrieved successfully")
     })
-    public ResponseEntity<Page<PatientResponseDTO>> getAllPatients(
-            @Parameter(description = "Page number (default: 0)") @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Page size (default: 10)") @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "Sort field (default: name)") @RequestParam(defaultValue = "name") String sort,
-            @Parameter(description = "Sort direction (default: asc)") @RequestParam(defaultValue = "asc") String direction) {
-
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? 
-                Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort));
-        Page<PatientResponseDTO> patients = patientService.getAllPatients(pageable);
+    public ResponseEntity<List<PatientResponseDTO>> getAllPatients() {
+        List<PatientResponseDTO> patients = patientService.getAllPatients();
         return ResponseEntity.ok(patients);
     }
 
