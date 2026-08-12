@@ -11,19 +11,15 @@ const PatientList = () => {
   const [editingPatient, setEditingPatient] = useState(null);
   const [viewingPatient, setViewingPatient] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
 
   const fetchPatients = async (page = 0) => {
     try {
       setLoading(true);
-      const data = await patientApi.getAllPatients(page, 10, 'name', 'asc');
-      setPatients(data.content);
-      setTotalPages(data.totalPages);
-      setCurrentPage(data.number);
+      const data = await patientApi.getAllPatients();
+      setPatients(data);
       setError(null);
     } catch (err) {
-      setError('Failed to fetch patients');
+      setError('Falha ao buscar pacientes');
       console.error(err);
     } finally {
       setLoading(false);
@@ -36,11 +32,9 @@ const PatientList = () => {
         setLoading(true);
         const data = await patientApi.searchPatients(searchTerm);
         setPatients(data);
-        setTotalPages(1);
-        setCurrentPage(0);
         setError(null);
       } catch (err) {
-        setError('Failed to search patients');
+        setError('Falha ao buscar pacientes');
         console.error(err);
       } finally {
         setLoading(false);
@@ -65,12 +59,12 @@ const PatientList = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this patient?')) {
+    if (window.confirm('Tem certeza que deseja excluir este paciente?')) {
       try {
         await patientApi.deletePatient(id);
-        fetchPatients(currentPage);
+        fetchPatients();
       } catch (err) {
-        setError('Failed to delete patient');
+        setError('Falha ao excluir paciente');
         console.error(err);
       }
     }
@@ -79,7 +73,7 @@ const PatientList = () => {
   const handleFormClose = () => {
     setShowForm(false);
     setEditingPatient(null);
-    fetchPatients(currentPage);
+    fetchPatients();
   };
 
   const handleFormSubmit = async (patientData) => {
@@ -91,7 +85,7 @@ const PatientList = () => {
       }
       handleFormClose();
     } catch (err) {
-      setError('Failed to save patient');
+      setError('Falha ao salvar paciente');
       console.error(err);
     }
   };
@@ -133,29 +127,29 @@ const PatientList = () => {
   return (
     <div className="patient-list">
       <div className="patient-list-header">
-        <h1>Patient Management</h1>
+        <h1>Gerenciamento de Pacientes</h1>
         <button className="btn btn-primary" onClick={handleCreate}>
-          Add New Patient
+          Adicionar Novo Paciente
         </button>
       </div>
 
       <div className="search-bar">
         <input
           type="text"
-          placeholder="Search by name..."
+          placeholder="Buscar por nome..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
         />
         <button className="btn btn-secondary" onClick={handleSearch}>
-          Search
+          Buscar
         </button>
         {searchTerm && (
           <button className="btn btn-secondary" onClick={() => {
             setSearchTerm('');
             fetchPatients();
           }}>
-            Clear
+            Limpar
           </button>
         )}
       </div>
@@ -163,26 +157,26 @@ const PatientList = () => {
       {error && <div className="error-message">{error}</div>}
 
       {loading ? (
-        <div className="loading">Loading...</div>
+        <div className="loading">Carregando...</div>
       ) : (
         <>
           <div className="patient-table-container">
             <table className="patient-table">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Nome</th>
                   <th>CPF</th>
                   <th>Email</th>
-                  <th>Phone</th>
-                  <th>Birth Date</th>
-                  <th>Actions</th>
+                  <th>Telefone</th>
+                  <th>Data de Nascimento</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
                 {patients.length === 0 ? (
                   <tr>
                     <td colSpan="6" className="no-data">
-                      No patients found
+                      Nenhum paciente encontrado
                     </td>
                   </tr>
                 ) : (
@@ -198,19 +192,19 @@ const PatientList = () => {
                           className="btn btn-small btn-view"
                           onClick={() => handleView(patient)}
                         >
-                          View
+                          Visualizar
                         </button>
                         <button
                           className="btn btn-small btn-edit"
                           onClick={() => handleEdit(patient)}
                         >
-                          Edit
+                          Editar
                         </button>
                         <button
                           className="btn btn-small btn-delete"
                           onClick={() => handleDelete(patient.id)}
                         >
-                          Delete
+                          Excluir
                         </button>
                       </td>
                     </tr>
@@ -219,28 +213,6 @@ const PatientList = () => {
               </tbody>
             </table>
           </div>
-
-          {totalPages > 1 && (
-            <div className="pagination">
-              <button
-                className="btn btn-secondary"
-                onClick={() => fetchPatients(currentPage - 1)}
-                disabled={currentPage === 0}
-              >
-                Previous
-              </button>
-              <span>
-                Page {currentPage + 1} of {totalPages}
-              </span>
-              <button
-                className="btn btn-secondary"
-                onClick={() => fetchPatients(currentPage + 1)}
-                disabled={currentPage === totalPages - 1}
-              >
-                Next
-              </button>
-            </div>
-          )}
         </>
       )}
 
@@ -248,14 +220,14 @@ const PatientList = () => {
         <div className="modal" onClick={() => setViewingPatient(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>Patient Details</h2>
+              <h2>Detalhes do Paciente</h2>
               <button className="btn-close" onClick={() => setViewingPatient(null)}>
                 ×
               </button>
             </div>
             <div className="modal-body">
               <div className="patient-detail">
-                <strong>Name:</strong> {viewingPatient.name}
+                <strong>Nome:</strong> {viewingPatient.name}
               </div>
               <div className="patient-detail">
                 <strong>CPF:</strong> {formatCPF(viewingPatient.cpf)}
@@ -264,61 +236,61 @@ const PatientList = () => {
                 <strong>Email:</strong> {viewingPatient.email}
               </div>
               <div className="patient-detail">
-                <strong>Phone:</strong> {formatPhone(viewingPatient.phone)}
+                <strong>Telefone:</strong> {formatPhone(viewingPatient.phone)}
               </div>
               <div className="patient-detail">
-                <strong>Birth Date:</strong> {formatDate(viewingPatient.birthDate)}
+                <strong>Data de Nascimento:</strong> {formatDate(viewingPatient.birthDate)}
               </div>
               {viewingPatient.gender && (
                 <div className="patient-detail">
-                  <strong>Gender:</strong> {viewingPatient.gender}
+                  <strong>Gênero:</strong> {viewingPatient.gender}
                 </div>
               )}
               {viewingPatient.address && (
                 <div className="patient-detail">
-                  <strong>Address:</strong> {viewingPatient.address}
+                  <strong>Endereço:</strong> {viewingPatient.address}
                 </div>
               )}
               {viewingPatient.city && (
                 <div className="patient-detail">
-                  <strong>City:</strong> {viewingPatient.city}
+                  <strong>Cidade:</strong> {viewingPatient.city}
                 </div>
               )}
               {viewingPatient.state && (
                 <div className="patient-detail">
-                  <strong>State:</strong> {viewingPatient.state}
+                  <strong>Estado:</strong> {viewingPatient.state}
                 </div>
               )}
               {viewingPatient.bloodType && (
                 <div className="patient-detail">
-                  <strong>Blood Type:</strong> {viewingPatient.bloodType}
+                  <strong>Tipo Sanguíneo:</strong> {viewingPatient.bloodType}
                 </div>
               )}
               {viewingPatient.allergies && (
                 <div className="patient-detail">
-                  <strong>Allergies:</strong> {viewingPatient.allergies}
+                  <strong>Alergias:</strong> {viewingPatient.allergies}
                 </div>
               )}
               {viewingPatient.medicalHistory && (
                 <div className="patient-detail">
-                  <strong>Medical History:</strong> {viewingPatient.medicalHistory}
+                  <strong>Histórico Médico:</strong> {viewingPatient.medicalHistory}
                 </div>
               )}
               {viewingPatient.emergencyContact && (
                 <div className="patient-detail">
-                  <strong>Emergency Contact:</strong> {viewingPatient.emergencyContact}
+                  <strong>Contato de Emergência:</strong> {viewingPatient.emergencyContact}
                 </div>
               )}
               {viewingPatient.emergencyPhone && (
                 <div className="patient-detail">
-                  <strong>Emergency Phone:</strong> {formatPhone(viewingPatient.emergencyPhone)}
+                  <strong>Telefone de Emergência:</strong> {formatPhone(viewingPatient.emergencyPhone)}
                 </div>
               )}
               <div className="patient-detail">
-                <strong>Created:</strong> {formatDate(viewingPatient.createdAt)}
+                <strong>Criado:</strong> {formatDate(viewingPatient.createdAt)}
               </div>
               <div className="patient-detail">
-                <strong>Updated:</strong> {formatDate(viewingPatient.updatedAt)}
+                <strong>Atualizado:</strong> {formatDate(viewingPatient.updatedAt)}
               </div>
             </div>
           </div>

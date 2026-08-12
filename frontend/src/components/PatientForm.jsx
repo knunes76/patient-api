@@ -63,36 +63,36 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
     const newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = 'Nome é obrigatório';
     } else if (formData.name.length < 2 || formData.name.length > 100) {
-      newErrors.name = 'Name must be between 2 and 100 characters';
+      newErrors.name = 'Nome deve ter entre 2 e 100 caracteres';
     }
 
     if (!formData.cpf.trim()) {
-      newErrors.cpf = 'CPF is required';
+      newErrors.cpf = 'CPF é obrigatório';
     } else if (!/^\d{11}$/.test(formData.cpf)) {
-      newErrors.cpf = 'CPF must be 11 digits';
+      newErrors.cpf = 'CPF deve ter 11 dígitos';
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email é obrigatório';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
+      newErrors.email = 'Formato de email inválido';
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone is required';
+      newErrors.phone = 'Telefone é obrigatório';
     } else if (!/^\d{10,11}$/.test(formData.phone)) {
-      newErrors.phone = 'Phone must be 10 or 11 digits';
+      newErrors.phone = 'Telefone deve ter 10 ou 11 dígitos';
     }
 
     if (!formData.birthDate) {
-      newErrors.birthDate = 'Birth date is required';
+      newErrors.birthDate = 'Data de nascimento é obrigatória';
     } else {
       const birthDate = new Date(formData.birthDate);
       const today = new Date();
       if (birthDate >= today) {
-        newErrors.birthDate = 'Birth date must be in the past';
+        newErrors.birthDate = 'Data de nascimento deve estar no passado';
       }
     }
 
@@ -110,18 +110,18 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
   return (
     <div className="patient-form-container">
       <div className="patient-form-header">
-        <h1>{patient ? 'Edit Patient' : 'Add New Patient'}</h1>
+        <h1>{patient ? 'Editar Paciente' : 'Adicionar Novo Paciente'}</h1>
         <button className="btn btn-secondary" onClick={onCancel}>
-          Cancel
+          Cancelar
         </button>
       </div>
 
       <form className="patient-form" onSubmit={handleSubmit}>
         <div className="form-section">
-          <h3>Basic Information</h3>
+          <h3>Informações Básicas</h3>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="name">Name *</label>
+              <label htmlFor="name">Nome *</label>
               <input
                 type="text"
                 id="name"
@@ -163,7 +163,7 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="phone">Phone *</label>
+              <label htmlFor="phone">Telefone *</label>
               <input
                 type="text"
                 id="phone"
@@ -179,7 +179,7 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="birthDate">Birth Date *</label>
+              <label htmlFor="birthDate">Data de Nascimento *</label>
               <input
                 type="date"
                 id="birthDate"
@@ -192,26 +192,26 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="gender">Gender</label>
+              <label htmlFor="gender">Gênero</label>
               <select
                 id="gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
               >
-                <option value="">Select</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="">Selecione</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
               </select>
             </div>
           </div>
         </div>
 
         <div className="form-section">
-          <h3>Address Information</h3>
+          <h3>Informações de Endereço</h3>
           <div className="form-group">
-            <label htmlFor="address">Address</label>
+            <label htmlFor="address">Endereço</label>
             <input
               type="text"
               id="address"
@@ -223,7 +223,7 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="city">City</label>
+              <label htmlFor="city">Cidade</label>
               <input
                 type="text"
                 id="city"
@@ -234,7 +234,7 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="state">State</label>
+              <label htmlFor="state">Estado</label>
               <input
                 type="text"
                 id="state"
@@ -247,7 +247,7 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="zipCode">ZIP Code</label>
+              <label htmlFor="zipCode">CEP</label>
               <input
                 type="text"
                 id="zipCode"
@@ -260,17 +260,17 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
         </div>
 
         <div className="form-section">
-          <h3>Medical Information</h3>
+          <h3>Informações Médicas</h3>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="bloodType">Blood Type</label>
+              <label htmlFor="bloodType">Tipo Sanguíneo</label>
               <select
                 id="bloodType"
                 name="bloodType"
                 value={formData.bloodType}
                 onChange={handleChange}
               >
-                <option value="">Select</option>
+                <option value="">Selecione</option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
                 <option value="B+">B+</option>
@@ -284,7 +284,7 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="allergies">Allergies</label>
+            <label htmlFor="allergies">Alergias</label>
             <textarea
               id="allergies"
               name="allergies"
@@ -295,7 +295,7 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="medicalHistory">Medical History</label>
+            <label htmlFor="medicalHistory">Histórico Médico</label>
             <textarea
               id="medicalHistory"
               name="medicalHistory"
@@ -307,10 +307,10 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
         </div>
 
         <div className="form-section">
-          <h3>Emergency Contact</h3>
+          <h3>Contato de Emergência</h3>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="emergencyContact">Contact Name</label>
+              <label htmlFor="emergencyContact">Nome do Contato</label>
               <input
                 type="text"
                 id="emergencyContact"
@@ -321,7 +321,7 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="emergencyPhone">Contact Phone</label>
+              <label htmlFor="emergencyPhone">Telefone do Contato</label>
               <input
                 type="text"
                 id="emergencyPhone"
@@ -336,10 +336,10 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
 
         <div className="form-actions">
           <button type="button" className="btn btn-secondary" onClick={onCancel}>
-            Cancel
+            Cancelar
           </button>
           <button type="submit" className="btn btn-primary">
-            {patient ? 'Update Patient' : 'Create Patient'}
+            {patient ? 'Atualizar Paciente' : 'Criar Paciente'}
           </button>
         </div>
       </form>
