@@ -56,16 +56,199 @@ ebserh/
 │   │   │       ├── db/migration/        # Migrações de banco de dados
 │   │   │       └── application.properties
 │   │   └── test/                        # Testes unitários
+│   ├── Dockerfile                       # Docker para produção
 │   └── pom.xml
 ├── frontend/                # Aplicação React
 │   ├── src/
 │   │   ├── components/      # Componentes React
 │   │   ├── api/            # Cliente API
 │   │   └── App.jsx
+│   ├── Dockerfile                       # Docker para produção
+│   ├── nginx.conf                       # Configuração Nginx
 │   ├── package.json
 │   └── vite.config.js
+├── k8s/                     # Manifests Kubernetes
+│   ├── configmap.yaml                 # Configurações
+│   ├── secret.yaml                    # Secrets
+│   ├── postgres-deployment.yaml       # Deploy PostgreSQL
+│   ├── postgres-service.yaml          # Service PostgreSQL
+│   ├── postgres-pvc.yaml              # Persistência PostgreSQL
+│   ├── backend-deployment.yaml        # Deploy Backend
+│   ├── backend-service.yaml           # Service Backend
+│   ├── backend-hpa.yaml               # Auto-scaling Backend
+│   ├── frontend-deployment.yaml      # Deploy Frontend
+│   ├── frontend-service.yaml         # Service Frontend
+│   ├── ingress.yaml                   # Ingress Controller
+│   ├── deploy.sh                      # Script de deployment
+│   └── cleanup.sh                     # Script de cleanup
+├── docker-compose.yml        # Docker Compose para desenvolvimento
 └── README.md
 ```
+
+## 🐳 Docker
+
+### Docker Compose (Desenvolvimento)
+
+Para rodar toda a aplicação com Docker Compose:
+
+```bash
+# Build e iniciar todos os serviços
+docker-compose up -d
+
+# Verificar status dos serviços
+docker-compose ps
+
+# Ver logs
+docker-compose logs -f
+
+# Parar serviços
+docker-compose down
+
+# Parar e remover volumes
+docker-compose down -v
+```
+
+Serviços disponíveis:
+- **PostgreSQL**: Porta 5432
+- **Backend**: Porta 8081
+- **Frontend**: Porta 5173
+
+### Build de Imagens Docker
+
+Para construir as imagens Docker manualmente:
+
+```bash
+# Build do backend
+cd backend
+docker build -t patient-api:latest .
+
+# Build do frontend
+cd frontend
+docker build -t patient-api-frontend:latest .
+```
+
+### Docker Registry
+
+Para push para um registry:
+
+```bash
+# Tag da imagem
+docker tag patient-api:latest seu-registry/patient-api:latest
+docker tag patient-api-frontend:latest seu-registry/patient-api-frontend:latest
+
+# Push
+docker push seu-registry/patient-api:latest
+docker push seu-registry/patient-api-frontend:latest
+```
+
+## ☸️ Kubernetes
+
+### Pré-requisitos
+
+- **kubectl** instalado e configurado
+- **Cluster Kubernetes** (minikube, kind, k3s, ou cloud provider)
+- **Ingress Controller** (nginx, traefik, etc)
+
+### Deployment
+
+O projeto inclui scripts automatizados para deployment no Kubernetes:
+
+```bash
+# Deploy completo
+./k8s/deploy.sh
+
+# Verificar status
+kubectl get all -l app=patient-api
+kubectl get ingress
+
+# Ver logs
+kubectl logs -l app=patient-api,component=backend -f
+kubectl logs -l app=patient-api,component=frontend -f
+```
+
+### Recursos Kubernetes
+
+**ConfigMap e Secret:**
+- `patient-api-config`: Configurações da aplicação
+- `patient-api-secret`: Senhas e dados sensíveis
+
+**PostgreSQL:**
+- **Deployment**: 1 réplica com PersistentVolumeClaim
+- **Service**: ClusterIP
+- **PVC**: 5GB de armazenamento persistente
+- **Health Checks**: Liveness e readiness probes
+
+**Backend:**
+- **Deployment**: 3 réplicas (configurável)
+- **Service**: ClusterIP
+- **HPA**: Auto-scaling de 2-10 réplicas baseado em CPU/Memória
+- **Resources**: 512Mi-1Gi RAM, 500m-1000m CPU
+- **Health Checks**: Liveness e readiness probes
+- **Strategy**: RollingUpdate com zero downtime
+
+**Frontend:**
+- **Deployment**: 2 réplicas
+- **Service**: LoadBalancer
+- **Resources**: 128Mi-256Mi RAM, 100m-200m CPU
+- **Health Checks**: Liveness e readiness probes
+
+**Ingress:**
+- **Host**: patient-api.local
+- **CORS**: Configurado para permitir requests cross-origin
+- **Routes**: `/api` → backend, `/` → frontend
+
+### Auto-scaling
+
+O HorizontalPodAutoscaler (HPA) configura automaticamente o número de réplicas:
+
+```bash
+# Verificar status do HPA
+kubectl get hpa
+
+# Ajustar limites manualmente
+kubectl edit hpa patient-api-hpa
+```
+
+### Monitoring e Debugging
+
+```bash
+# Ver pods
+kubectl get pods -l app=patient-api
+
+# Descrever pod
+kubectl describe pod <pod-name>
+
+# Executar comando no pod
+kubectl exec -it <pod-name> -- /bin/sh
+
+# Port forwarding para debug local
+kubectl port-forward service/patient-api-service 8081:8081
+kubectl port-forward service/patient-api-frontend-service 5173:80
+```
+
+### Cleanup
+
+Para remover todos os recursos do Kubernetes:
+
+```bash
+./k8s/cleanup.sh
+```
+
+Ou manualmente:
+
+```bash
+kubectl delete -f k8s/
+```
+
+### Configurações Personalizadas
+
+Edite os arquivos em `k8s/` para personalizar:
+
+- **ConfigMap**: Alterar variáveis de ambiente
+- **Secret**: Atualizar senhas
+- **Deployments**: Ajustar recursos e réplicas
+- **HPA**: Modificar parâmetros de auto-scaling
+- **Ingress**: Alterar domínio e rotas
 
 ## 🔧 Instruções de Configuração
 
@@ -229,17 +412,26 @@ A tabela `patients` inclui:
 - Validação de entrada em todos os endpoints
 - Prevenção de injeção SQL via JPA/Hibernate
 - Proteção XSS no frontend React
+- ✅ **Implementado**: Configuração CORS para desenvolvimento
+- ✅ **Implementado**: Secrets Kubernetes para dados sensíveis
+- ✅ **Implementado**: Não-root user em containers Docker
+- ✅ **Implementado**: Health checks e liveness probes
+- ✅ **Implementado**: Security headers no Nginx
 - Proteção CSRF (pode ser habilitada para produção)
 
 ### Recomendações para Produção
 - Implementar autenticação e autorização (JWT, OAuth2)
 - Adicionar limitação de taxa (rate limiting)
 - Habilitar HTTPS
-- Implementar configuração CORS
-- Adicionar autenticação por chave de API
+- Implementar autenticação por chave de API
 - Criptografar dados sensíveis em repouso
 - Implementar logging de auditoria
-- Adicionar headers de segurança
+- Adicionar headers de segurança adicionais
+- Implementar network policies no Kubernetes
+- Usar image scanner para vulnerabilidades
+- Implementar pod security policies
+- Configurar RBAC no Kubernetes
+- Adicionar secrets management (Vault)
 
 ## 📈 Considerações de Escalabilidade
 
@@ -248,16 +440,29 @@ A tabela `patients` inclui:
 - Suporte a paginação
 - Indexação de banco de dados em campos frequentemente consultados
 - Design de serviço sem estado
+- **Docker containerization** para portabilidade
+- **Kubernetes orchestration** para escalabilidade automática
+- **HorizontalPodAutoscaler** para auto-scaling baseado em métricas
+- **Load balancing** via Kubernetes Services
+- **Health checks** para monitoring e auto-recovery
+- **Rolling updates** para zero downtime deployments
 
 ### Recomendações para Escalonamento
+- ✅ **Implementado**: Auto-scaling automático via HPA (2-10 réplicas)
+- ✅ **Implementado**: Load balancing via Kubernetes Services
+- ✅ **Implementado**: Health checks e readiness probes
+- ✅ **Implementado**: Rolling updates para zero downtime
+- ✅ **Implementado**: ConfigMap e Secret para gerenciamento de configurações
+- ✅ **Implementado**: PersistentVolume para dados PostgreSQL
 - Implementar cache (Redis)
-- Adicionar balanceamento de carga
-- Implementar réplicas de leitura do banco de dados
-- Usar pool de conexões
+- Adicionar réplicas de leitura do banco de dados
 - Implementar API gateway
-- Adicionar monitoramento e alertas
+- Adicionar monitoramento e alertas (Prometheus, Grafana)
 - Considerar arquitetura de microsserviços para maior escala
 - Implementar CDN para ativos estáticos
+- Adicionar service mesh (Istio, Linkerd)
+- Implementar rate limiting no Ingress
+- Configurar autoscaling do PostgreSQL
 
 ## 🔧 Manutenção
 
