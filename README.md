@@ -1,333 +1,333 @@
-# Patient Management API
+# API de Gerenciamento de Pacientes
 
-A complete CRUD application for managing patient records, built with Java/Spring Boot backend and React frontend.
+Uma aplicação CRUD completa para gerenciar registros de pacientes, construída com backend Java/Spring Boot e frontend React.
 
-## 🚀 Project Overview
+## 🚀 Visão Geral do Projeto
 
-This project implements a comprehensive Patient Management System with full CRUD operations, RESTful API, modern React frontend, and database integration. It includes comprehensive unit tests, API documentation with Swagger/OpenAPI, and database migration scripts.
+Este projeto implementa um Sistema de Gerenciamento de Pacientes abrangente com operações CRUD completas, API RESTful, frontend React moderno e integração com banco de dados. Inclui testes unitários abrangentes, documentação de API com Swagger/OpenAPI e scripts de migração de banco de dados.
 
-## 🛠 Technology Stack
+## 🛠 Stack Tecnológico
 
 ### Backend
 - **Java 17**
 - **Spring Boot 3.2.0**
-- **Spring Data JPA** - Database abstraction
-- **Spring Validation** - Input validation
-- **H2 Database** - Development/testing (in-memory)
-- **PostgreSQL** - Production database
-- **Flyway** - Database migrations
-- **SpringDoc OpenAPI** - API documentation
-- **JUnit 5 & Mockito** - Unit testing
-- **Maven** - Build tool
+- **Spring Data JPA** - Abstração de banco de dados
+- **Spring Validation** - Validação de entrada
+- **H2 Database** - Desenvolvimento/testes (em memória)
+- **PostgreSQL** - Banco de dados de produção
+- **Flyway** - Migrações de banco de dados
+- **SpringDoc OpenAPI** - Documentação de API
+- **JUnit 5 & Mockito** - Testes unitários
+- **Maven** - Ferramenta de build
 
 ### Frontend
-- **React 19** - UI framework
-- **Vite** - Build tool and dev server
-- **Axios** - HTTP client
-- **React Router DOM** - Client-side routing
-- **CSS3** - Styling
+- **React 19** - Framework de UI
+- **Vite** - Ferramenta de build e servidor de desenvolvimento
+- **Axios** - Cliente HTTP
+- **React Router DOM** - Roteamento no lado do cliente
+- **CSS3** - Estilização
 
-## 📋 Prerequisites
+## 📋 Pré-requisitos
 
-Before running this application, ensure you have installed:
+Antes de executar esta aplicação, certifique-se de ter instalado:
 
-- **Java 17** or higher
+- **Java 17** ou superior
 - **Maven 3.6+** 
-- **Node.js 18+** and **npm**
-- **PostgreSQL 14+** (for production environment)
-- **Git** (for version control)
+- **Node.js 18+** e **npm**
+- **PostgreSQL 14+** (para ambiente de produção)
+- **Git** (para controle de versão)
 
-## 🏗 Project Structure
+## 🏗 Estrutura do Projeto
 
 ```
 ebserh/
-├── backend/                 # Spring Boot application
+├── backend/                 # Aplicação Spring Boot
 │   ├── src/
 │   │   ├── main/
 │   │   │   ├── java/
 │   │   │   │   └── com/ebserh/patientapi/
-│   │   │   │       ├── controller/      # REST controllers
-│   │   │   │       ├── service/         # Business logic
-│   │   │   │       ├── repository/      # Data access layer
-│   │   │   │       ├── model/           # Entity models and DTOs
-│   │   │   │       ├── config/          # Configuration classes
-│   │   │   │       └── exception/       # Exception handling
+│   │   │   │       ├── controller/      # Controladores REST
+│   │   │   │       ├── service/         # Lógica de negócio
+│   │   │   │       ├── repository/      # Camada de acesso a dados
+│   │   │   │       ├── model/           # Modelos de entidade e DTOs
+│   │   │   │       ├── config/          # Classes de configuração
+│   │   │   │       └── exception/       # Tratamento de exceções
 │   │   │   └── resources/
-│   │   │       ├── db/migration/        # Database migrations
+│   │   │       ├── db/migration/        # Migrações de banco de dados
 │   │   │       └── application.properties
-│   │   └── test/                        # Unit tests
+│   │   └── test/                        # Testes unitários
 │   └── pom.xml
-├── frontend/                # React application
+├── frontend/                # Aplicação React
 │   ├── src/
-│   │   ├── components/      # React components
-│   │   ├── api/            # API client
+│   │   ├── components/      # Componentes React
+│   │   ├── api/            # Cliente API
 │   │   └── App.jsx
 │   ├── package.json
 │   └── vite.config.js
 └── README.md
 ```
 
-## 🔧 Setup Instructions
+## 🔧 Instruções de Configuração
 
-### Backend Setup
+### Configuração do Backend
 
-1. **Navigate to the backend directory:**
+1. **Navegue até o diretório backend:**
    ```bash
    cd backend
    ```
 
-2. **Install dependencies and build the project:**
+2. **Instale as dependências e construa o projeto:**
    ```bash
    mvn clean install
    ```
 
-3. **Configure the database:**
+3. **Configure o banco de dados:**
    
-   For **development** (H2 in-memory database):
-   - No additional setup required
-   - Database is created automatically on startup
+   Para **desenvolvimento** (banco de dados H2 em memória):
+   - Nenhuma configuração adicional necessária
+   - O banco de dados é criado automaticamente ao iniciar
    
-   For **production** (PostgreSQL):
-   - Create a PostgreSQL database:
+   Para **produção** (PostgreSQL):
+   - Crie um banco de dados PostgreSQL:
      ```sql
      CREATE DATABASE patientdb;
      ```
-   - Update `src/main/resources/application-prod.properties` with your database credentials
-   - Ensure PostgreSQL is running and accessible
+   - Atualize `src/main/resources/application-prod.properties` com suas credenciais do banco de dados
+   - Certifique-se de que o PostgreSQL está rodando e acessível
 
-4. **Run the application:**
+4. **Execute a aplicação:**
    ```bash
-   # Development mode (H2 database)
+   # Modo desenvolvimento (banco de dados H2)
    mvn spring-boot:run
    
-   # Production mode (PostgreSQL)
+   # Modo produção (PostgreSQL)
    mvn spring-boot:run -Dspring-boot.run.profiles=prod
    ```
 
-   The backend will start on `http://localhost:8080`
+   O backend será iniciado em `http://localhost:8080`
 
-### Frontend Setup
+### Configuração do Frontend
 
-1. **Navigate to the frontend directory:**
+1. **Navegue até o diretório frontend:**
    ```bash
    cd frontend
    ```
 
-2. **Install dependencies:**
+2. **Instale as dependências:**
    ```bash
    npm install
    ```
 
-3. **Start the development server:**
+3. **Inicie o servidor de desenvolvimento:**
    ```bash
    npm run dev
    ```
 
-   The frontend will start on `http://localhost:5173`
+   O frontend será iniciado em `http://localhost:5173`
 
-## 📚 API Documentation
+## 📚 Documentação da API
 
-Once the backend is running, access the interactive API documentation:
+Uma vez que o backend esteja rodando, acesse a documentação interativa da API:
 
 - **Swagger UI**: `http://localhost:8080/swagger-ui.html`
 - **OpenAPI JSON**: `http://localhost:8080/api-docs`
 
-### API Endpoints
+### Endpoints da API
 
-| Method | Endpoint | Description |
+| Método | Endpoint | Descrição |
 |--------|----------|-------------|
-| POST | `/api/patients` | Create a new patient |
-| GET | `/api/patients/{id}` | Get patient by ID |
-| GET | `/api/patients/cpf/{cpf}` | Get patient by CPF |
-| GET | `/api/patients` | Get all patients (paginated) |
-| GET | `/api/patients/search?name={name}` | Search patients by name |
-| PUT | `/api/patients/{id}` | Update patient |
-| DELETE | `/api/patients/{id}` | Delete patient |
+| POST | `/api/patients` | Criar um novo paciente |
+| GET | `/api/patients/{id}` | Obter paciente por ID |
+| GET | `/api/patients/cpf/{cpf}` | Obter paciente por CPF |
+| GET | `/api/patients` | Obter todos os pacientes (paginado) |
+| GET | `/api/patients/search?name={name}` | Buscar pacientes por nome |
+| PUT | `/api/patients/{id}` | Atualizar paciente |
+| DELETE | `/api/patients/{id}` | Deletar paciente |
 
-### Example API Usage
+### Exemplos de Uso da API
 
-**Create a patient:**
+**Criar um paciente:**
 ```bash
 curl -X POST http://localhost:8080/api/patients \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "John Doe",
+    "name": "João Silva",
     "cpf": "12345678901",
-    "email": "john.doe@example.com",
+    "email": "joao.silva@example.com",
     "phone": "11987654321",
     "birthDate": "1990-01-01",
-    "gender": "Male",
+    "gender": "Masculino",
     "bloodType": "O+"
   }'
 ```
 
-**Get all patients:**
+**Obter todos os pacientes:**
 ```bash
 curl http://localhost:8080/api/patients?page=0&size=10&sort=name&direction=asc
 ```
 
-**Update a patient:**
+**Atualizar um paciente:**
 ```bash
 curl -X PUT http://localhost:8080/api/patients/1 \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "John Updated",
+    "name": "João Silva Atualizado",
     "cpf": "12345678901",
-    "email": "john.updated@example.com",
+    "email": "joao.atualizado@example.com",
     "phone": "11987654321",
     "birthDate": "1990-01-01"
   }'
 ```
 
-## 🧪 Testing
+## 🧪 Testes
 
-### Backend Tests
+### Testes do Backend
 
-Run the unit tests:
+Execute os testes unitários:
 ```bash
 cd backend
 mvn test
 ```
 
-The test suite includes:
-- Service layer tests with Mockito
-- Controller tests with MockMvc
-- Exception handling tests
-- Validation tests
+A suíte de testes inclui:
+- Testes da camada de serviço com Mockito
+- Testes de controlador com MockMvc
+- Testes de tratamento de exceções
+- Testes de validação
 
-### Frontend Tests
+### Testes do Frontend
 
-The frontend can be tested manually through the UI or by adding automated tests. Currently, the application is designed for manual testing through the React interface.
+O frontend pode ser testado manualmente através da interface ou adicionando testes automatizados. Atualmente, a aplicação foi projetada para testes manuais através da interface React.
 
-## 🗄️ Database
+## 🗄️ Banco de Dados
 
-### Development (H2)
-- In-memory database for development and testing
-- Automatically created and populated with sample data
-- Access H2 Console: `http://localhost:8080/h2-console`
+### Desenvolvimento (H2)
+- Banco de dados em memória para desenvolvimento e testes
+- Criado automaticamente e populado com dados de exemplo
+- Acesso ao Console H2: `http://localhost:8080/h2-console`
   - JDBC URL: `jdbc:h2:mem:patientdb`
-  - Username: `sa`
-  - Password: (empty)
+  - Usuário: `sa`
+  - Senha: (vazia)
 
-### Production (PostgreSQL)
-- Persistent database for production use
-- Flyway migrations handle schema management
-- Sample data can be loaded via migration scripts
+### Produção (PostgreSQL)
+- Banco de dados persistente para uso em produção
+- Migrações Flyway gerenciam o esquema do banco
+- Dados de exemplo podem ser carregados via scripts de migração
 
-### Database Schema
+### Esquema do Banco de Dados
 
-The `patients` table includes:
-- Basic information: name, CPF, email, phone, birth date, gender
-- Address: street, city, state, ZIP code
-- Medical: blood type, allergies, medical history
-- Emergency: contact name and phone
+A tabela `patients` inclui:
+- Informações básicas: nome, CPF, email, telefone, data de nascimento, gênero
+- Endereço: rua, cidade, estado, CEP
+- Médico: tipo sanguíneo, alergias, histórico médico
+- Emergência: nome do contato e telefone
 - Timestamps: created_at, updated_at
 
-## 🔐 Security Considerations
+## 🔐 Considerações de Segurança
 
-### Current Implementation
-- Input validation on all endpoints
-- SQL injection prevention via JPA/Hibernate
-- XSS protection in React frontend
-- CSRF protection (can be enabled for production)
+### Implementação Atual
+- Validação de entrada em todos os endpoints
+- Prevenção de injeção SQL via JPA/Hibernate
+- Proteção XSS no frontend React
+- Proteção CSRF (pode ser habilitada para produção)
 
-### Recommendations for Production
-- Implement authentication and authorization (JWT, OAuth2)
-- Add rate limiting
-- Enable HTTPS
-- Implement CORS configuration
-- Add API key authentication
-- Encrypt sensitive data at rest
-- Implement audit logging
-- Add security headers
+### Recomendações para Produção
+- Implementar autenticação e autorização (JWT, OAuth2)
+- Adicionar limitação de taxa (rate limiting)
+- Habilitar HTTPS
+- Implementar configuração CORS
+- Adicionar autenticação por chave de API
+- Criptografar dados sensíveis em repouso
+- Implementar logging de auditoria
+- Adicionar headers de segurança
 
-## 📈 Scalability Considerations
+## 📈 Considerações de Escalabilidade
 
-### Current Architecture
-- RESTful API design
-- Pagination support
-- Database indexing on frequently queried fields
-- Stateless service design
+### Arquitetura Atual
+- Design de API RESTful
+- Suporte a paginação
+- Indexação de banco de dados em campos frequentemente consultados
+- Design de serviço sem estado
 
-### Recommendations for Scaling
-- Implement caching (Redis)
-- Add load balancing
-- Implement database read replicas
-- Use connection pooling
-- Implement API gateway
-- Add monitoring and alerting
-- Consider microservices architecture for larger scale
-- Implement CDN for static assets
+### Recomendações para Escalonamento
+- Implementar cache (Redis)
+- Adicionar balanceamento de carga
+- Implementar réplicas de leitura do banco de dados
+- Usar pool de conexões
+- Implementar API gateway
+- Adicionar monitoramento e alertas
+- Considerar arquitetura de microsserviços para maior escala
+- Implementar CDN para ativos estáticos
 
-## 🔧 Maintenance
+## 🔧 Manutenção
 
-### Code Quality
-- Consistent code formatting
-- Comprehensive unit tests
-- Documentation via Swagger/OpenAPI
-- Clear separation of concerns
+### Qualidade do Código
+- Formatação de código consistente
+- Testes unitários abrangentes
+- Documentação via Swagger/OpenAPI
+- Separação clara de responsabilidades
 
-### Recommendations
-- Implement CI/CD pipeline
-- Add integration tests
-- Implement logging strategy
-- Add performance monitoring
-- Regular dependency updates
-- Code review process
-- Documentation updates
+### Recomendações
+- Implementar pipeline CI/CD
+- Adicionar testes de integração
+- Implementar estratégia de logging
+- Adicionar monitoramento de performance
+- Atualizações regulares de dependências
+- Processo de revisão de código
+- Atualizações de documentação
 
-## 🐛 Troubleshooting
+## 🐛 Solução de Problemas
 
-### Backend Issues
+### Problemas do Backend
 
-**Port already in use:**
+**Porta já em uso:**
 ```bash
-# Change port in application.properties
+# Altere a porta em application.properties
 server.port=8081
 ```
 
-**Database connection issues:**
-- Verify PostgreSQL is running
-- Check connection string in application-prod.properties
-- Ensure database exists
+**Problemas de conexão com banco de dados:**
+- Verifique se o PostgreSQL está rodando
+- Verifique a string de conexão em application-prod.properties
+- Certifique-se de que o banco de dados existe
 
-**Build failures:**
+**Falhas no build:**
 ```bash
 mvn clean install -U
 ```
 
-### Frontend Issues
+### Problemas do Frontend
 
-**Dependencies issues:**
+**Problemas de dependências:**
 ```bash
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-**Port conflicts:**
+**Conflitos de porta:**
 ```bash
 npm run dev -- --port 3000
 ```
 
-**API connection issues:**
-- Verify backend is running
-- Check proxy configuration in vite.config.js
-- Ensure CORS is properly configured
+**Problemas de conexão com API:**
+- Verifique se o backend está rodando
+- Verifique a configuração de proxy em vite.config.js
+- Certifique-se de que o CORS está configurado corretamente
 
-## 📝 License
+## 📝 Licença
 
-This project is created for technical assessment purposes.
+Este projeto foi criado para fins de avaliação técnica.
 
-## 👥 Authors
+## 👥 Autores
 
-- Developed as a technical assessment for EBSERH
+- Desenvolvido como avaliação técnica para EBSERH
 
-## 🤝 Contributing
+## 🤝 Contribuindo
 
-This is a technical assessment project. For production use, consider implementing additional features like:
-- User authentication and authorization
-- Advanced search and filtering
-- File upload for medical documents
-- Appointment scheduling
-- Integration with external medical systems
-- Mobile application support
+Este é um projeto de avaliação técnica. Para uso em produção, considere implementar recursos adicionais como:
+- Autenticação e autorização de usuários
+- Busca e filtragem avançadas
+- Upload de arquivos para documentos médicos
+- Agendamento de consultas
+- Integração com sistemas médicos externos
+- Suporte a aplicativo móvel
