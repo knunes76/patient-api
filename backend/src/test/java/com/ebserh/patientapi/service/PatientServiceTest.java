@@ -3,9 +3,11 @@ package com.ebserh.patientapi.service;
 import com.ebserh.patientapi.exception.ResourceAlreadyExistsException;
 import com.ebserh.patientapi.exception.ResourceNotFoundException;
 import com.ebserh.patientapi.model.Patient;
+import com.ebserh.patientapi.model.Unity;
 import com.ebserh.patientapi.model.dto.PatientRequestDTO;
 import com.ebserh.patientapi.model.dto.PatientResponseDTO;
 import com.ebserh.patientapi.repository.PatientRepository;
+import com.ebserh.patientapi.repository.UnityRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @ExtendWith(MockitoExtension.class)
 class PatientServiceTest {
@@ -32,14 +36,22 @@ class PatientServiceTest {
     @Mock
     private PatientRepository patientRepository;
 
+    @Mock
+    private UnityRepository unityRepository;
+
     @InjectMocks
     private PatientService patientService;
 
     private Patient patient;
     private PatientRequestDTO patientDTO;
+    private Unity unity;
 
     @BeforeEach
     void setUp() {
+        unity = new Unity();
+        unity.setId(1L);
+        unity.setName("Hospital Univ. de BH");
+
         patient = new Patient();
         patient.setId(1L);
         patient.setName("John Doe");
@@ -47,6 +59,7 @@ class PatientServiceTest {
         patient.setEmail("john.doe@example.com");
         patient.setPhone("11987654321");
         patient.setBirthDate(LocalDate.of(1990, 1, 1));
+        patient.setUnity(unity);
 
         patientDTO = new PatientRequestDTO();
         patientDTO.setName("John Doe");
@@ -54,12 +67,14 @@ class PatientServiceTest {
         patientDTO.setEmail("john.doe@example.com");
         patientDTO.setPhone("11987654321");
         patientDTO.setBirthDate(LocalDate.of(1990, 1, 1));
+        patientDTO.setUnityId(1L);
     }
 
     @Test
     void createPatient_Success() {
         when(patientRepository.existsByCpf(anyString())).thenReturn(false);
         when(patientRepository.existsByEmail(anyString())).thenReturn(false);
+        when(unityRepository.findById(anyLong())).thenReturn(Optional.of(unity));
         when(patientRepository.save(any(Patient.class))).thenReturn(patient);
 
         PatientResponseDTO result = patientService.createPatient(patientDTO);
@@ -168,10 +183,12 @@ class PatientServiceTest {
         existingPatient.setEmail("john.doe@example.com");
         existingPatient.setPhone("11987654321");
         existingPatient.setBirthDate(LocalDate.of(1990, 1, 1));
+        existingPatient.setUnity(unity);
 
         patientDTO.setName("John Updated");
 
         when(patientRepository.findById(1L)).thenReturn(Optional.of(existingPatient));
+        when(unityRepository.findById(anyLong())).thenReturn(Optional.of(unity));
         when(patientRepository.save(any(Patient.class))).thenReturn(existingPatient);
 
         PatientResponseDTO result = patientService.updatePatient(1L, patientDTO);

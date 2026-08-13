@@ -219,7 +219,7 @@ const PatientList = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Data de Nascimento
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[300px]">
                   Ações
                 </th>
               </tr>
@@ -249,41 +249,41 @@ const PatientList = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatDate(patient.birthDate)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div className="flex gap-2">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 min-w-[300px]">
+                      <div className="flex flex-wrap gap-2">
                         <button
                           onClick={() => handleView(patient)}
-                          className="text-blue-600 hover:text-blue-800 font-medium"
+                          className="text-blue-600 hover:text-blue-800 font-medium text-xs px-2 py-1 border border-blue-200 rounded hover:bg-blue-50"
                         >
                           Visualizar
                         </button>
                         <button
                           onClick={() => handleEdit(patient)}
-                          className="text-green-600 hover:text-green-800 font-medium"
+                          className="text-green-600 hover:text-green-800 font-medium text-xs px-2 py-1 border border-green-200 rounded hover:bg-green-50"
                         >
                           Editar
                         </button>
                         <button
                           onClick={() => handleExams(patient)}
-                          className="text-purple-600 hover:text-purple-800 font-medium"
+                          className="text-purple-600 hover:text-purple-800 font-medium text-xs px-2 py-1 border border-purple-200 rounded hover:bg-purple-50"
                         >
                           Exames
                         </button>
                         <button
                           onClick={() => handleMedications(patient)}
-                          className="text-orange-600 hover:text-orange-800 font-medium"
+                          className="text-orange-600 hover:text-orange-800 font-medium text-xs px-2 py-1 border border-orange-200 rounded hover:bg-orange-50"
                         >
                           Medicamentos
                         </button>
                         <button
                           onClick={() => handleClinicalEvolution(patient)}
-                          className="text-teal-600 hover:text-teal-800 font-medium"
+                          className="text-teal-600 hover:text-teal-800 font-medium text-xs px-2 py-1 border border-teal-200 rounded hover:bg-teal-50"
                         >
                           Evolução
                         </button>
                         <button
                           onClick={() => handleDelete(patient.id)}
-                          className="text-red-600 hover:text-red-800 font-medium"
+                          className="text-red-600 hover:text-red-800 font-medium text-xs px-2 py-1 border border-red-200 rounded hover:bg-red-50"
                         >
                           Excluir
                         </button>

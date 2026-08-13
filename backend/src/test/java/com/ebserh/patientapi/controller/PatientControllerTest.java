@@ -2,15 +2,19 @@ package com.ebserh.patientapi.controller;
 
 import com.ebserh.patientapi.model.dto.PatientRequestDTO;
 import com.ebserh.patientapi.model.dto.PatientResponseDTO;
+import com.ebserh.patientapi.security.JwtUtil;
 import com.ebserh.patientapi.service.PatientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+// import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+// import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -23,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PatientController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class PatientControllerTest {
 
     @Autowired
@@ -30,6 +35,12 @@ class PatientControllerTest {
 
     @MockBean
     private PatientService patientService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+
+    // @MockBean
+    // private UserDetailsService userDetailsService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -45,6 +56,7 @@ class PatientControllerTest {
         patientDTO.setEmail("john.doe@example.com");
         patientDTO.setPhone("11987654321");
         patientDTO.setBirthDate(LocalDate.of(1990, 1, 1));
+        patientDTO.setUnityId(1L);
 
         patientResponseDTO = new PatientResponseDTO();
         patientResponseDTO.setId(1L);
@@ -53,9 +65,12 @@ class PatientControllerTest {
         patientResponseDTO.setEmail("john.doe@example.com");
         patientResponseDTO.setPhone("11987654321");
         patientResponseDTO.setBirthDate(LocalDate.of(1990, 1, 1));
+        patientResponseDTO.setUnityId(1L);
+        patientResponseDTO.setUnityName("Hospital Univ. de BH");
     }
 
     @Test
+    // @WithMockUser
     void createPatient_Success() throws Exception {
         when(patientService.createPatient(any(PatientRequestDTO.class))).thenReturn(patientResponseDTO);
 
@@ -69,6 +84,7 @@ class PatientControllerTest {
     }
 
     @Test
+    // @WithMockUser
     void createPatient_ValidationError() throws Exception {
         patientDTO.setName(""); // Invalid name
 
@@ -79,6 +95,7 @@ class PatientControllerTest {
     }
 
     @Test
+    // @WithMockUser
     void getPatientById_Success() throws Exception {
         when(patientService.getPatientById(1L)).thenReturn(patientResponseDTO);
 
@@ -89,6 +106,7 @@ class PatientControllerTest {
     }
 
     @Test
+    // @WithMockUser
     void getPatientByCpf_Success() throws Exception {
         when(patientService.getPatientByCpf("12345678901")).thenReturn(patientResponseDTO);
 
@@ -99,6 +117,7 @@ class PatientControllerTest {
     }
 
     @Test
+    // @WithMockUser
     void getAllPatients_Success() throws Exception {
         PatientResponseDTO patient2 = new PatientResponseDTO();
         patient2.setId(2L);
@@ -118,6 +137,7 @@ class PatientControllerTest {
     }
 
     @Test
+    // @WithMockUser
     void searchPatientsByName_Success() throws Exception {
         PatientResponseDTO patient2 = new PatientResponseDTO();
         patient2.setId(2L);
@@ -138,6 +158,7 @@ class PatientControllerTest {
     }
 
     @Test
+    // @WithMockUser
     void updatePatient_Success() throws Exception {
         patientResponseDTO.setName("John Updated");
         when(patientService.updatePatient(eq(1L), any(PatientRequestDTO.class))).thenReturn(patientResponseDTO);
@@ -150,6 +171,7 @@ class PatientControllerTest {
     }
 
     @Test
+    // @WithMockUser
     void deletePatient_Success() throws Exception {
         mockMvc.perform(delete("/api/patients/1"))
                 .andExpect(status().isNoContent());

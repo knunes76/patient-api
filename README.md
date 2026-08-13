@@ -6,6 +6,13 @@ Uma aplicação CRUD completa para gerenciar registros de pacientes, construída
 
 Este projeto implementa um Sistema de Gerenciamento de Pacientes abrangente com operações CRUD completas, API RESTful, frontend React moderno e integração com banco de dados. Inclui testes unitários abrangentes, documentação de API com Swagger/OpenAPI e scripts de migração de banco de dados.
 
+## Considerações
+- Aplicação BackEnd: foi desenvolvido manualmente para maior controle e compreensão do código.
+- Aplicação FrontEnd: foi desenvolvido com auxílio da IA para integrar o uso do layout pelo TailwindCSS.
+- Documentação: foi gerada pela IA e revisada manualmente.
+- Segurança do projeto: foi implementada manualmente usando autenticação JWT.
+- Escalabilidade: foi implementada manualmente a criação de cluster Kubernetes e aplicação em containers no Docker.
+
 ## 🛠 Stack Tecnológico
 
 ### Backend
@@ -26,6 +33,12 @@ Este projeto implementa um Sistema de Gerenciamento de Pacientes abrangente com 
 - **Axios** - Cliente HTTP
 - **React Router DOM** - Roteamento no lado do cliente
 - **CSS3** - Estilização
+
+### Documentação
+- Veja a pasta `docs/` para mais detalhes.
+- Documentação da API: `docs/api-documentation.md`
+- Diagrama de classes: `docs/Diagrama de Classes - Sistema de Gestão de Pacientes.png`
+- Diagrama de Entidade e relacionamento: `docs/diagrama-entidade-relacionamento.png`
 
 ## 📋 Pré-requisitos
 

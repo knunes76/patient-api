@@ -25,6 +25,15 @@ package "Model" <<Domain>> {
         - String allergies
         - String emergencyContact
         - String emergencyPhone
+        - Unity unity
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class Unity {
+        - Long id
+        - String name
         - LocalDateTime createdAt
         - LocalDateTime updatedAt
         + getters and setters
@@ -98,6 +107,41 @@ package "Model" <<Domain>> {
         - LocalDateTime updatedAt
         + getters and setters
     }
+    
+    class CID10 {
+        - Long id
+        - String code
+        - String description
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class Specialty {
+        - Long id
+        - String name
+        - String description
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class ClinicalEvolution {
+        - Long id
+        - Patient patient
+        - Doctor doctor
+        - CID10 cid10
+        - Specialty specialty
+        - User createdBy
+        - LocalDate appointmentDate
+        - String complaint
+        - String diagnosis
+        - String consultationType
+        - String subject
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
 }
 
 package "DTO" <<Data Transfer>> {
@@ -118,6 +162,44 @@ package "DTO" <<Data Transfer>> {
         - String allergies
         - String emergencyContact
         - String emergencyPhone
+        - Long unityId
+        + getters and setters
+    }
+    
+    class PatientResponseDTO {
+        - Long id
+        - String name
+        - String cpf
+        - String email
+        - String phone
+        - LocalDate birthDate
+        - String gender
+        - String bloodType
+        - String address
+        - String city
+        - String state
+        - String zipCode
+        - String medicalHistory
+        - String allergies
+        - String emergencyContact
+        - String emergencyPhone
+        - Long unityId
+        - String unityName
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class UnityRequestDTO {
+        - String name
+        + getters and setters
+    }
+    
+    class UnityResponseDTO {
+        - Long id
+        - String name
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
         + getters and setters
     }
     
@@ -202,6 +284,74 @@ package "DTO" <<Data Transfer>> {
         - LocalDateTime updatedAt
         + getters and setters
     }
+    
+    class CID10RequestDTO {
+        - String code
+        - String description
+        + getters and setters
+    }
+    
+    class CID10ResponseDTO {
+        - Long id
+        - String code
+        - String description
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class SpecialtyRequestDTO {
+        - String name
+        - String description
+        + getters and setters
+    }
+    
+    class SpecialtyResponseDTO {
+        - Long id
+        - String name
+        - String description
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class ClinicalEvolutionRequestDTO {
+        - Long patientId
+        - Long doctorId
+        - Long cid10Id
+        - Long specialtyId
+        - Long createdBy
+        - LocalDate appointmentDate
+        - String complaint
+        - String diagnosis
+        - String consultationType
+        - String subject
+        + getters and setters
+    }
+    
+    class ClinicalEvolutionResponseDTO {
+        - Long id
+        - Long patientId
+        - String patientName
+        - Long doctorId
+        - String doctorName
+        - String doctorCrm
+        - Long cid10Id
+        - String cid10Code
+        - String cid10Description
+        - Long specialtyId
+        - String specialtyName
+        - Long createdBy
+        - String createdByName
+        - LocalDate appointmentDate
+        - String complaint
+        - String diagnosis
+        - String consultationType
+        - String subject
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
 }
 
 package "Repository" <<Data Access>> {
@@ -212,6 +362,14 @@ package "Repository" <<Data Access>> {
         + Patient save(Patient patient)
         + void deleteById(Long id)
         + Optional<Patient> findByCpf(String cpf)
+        + List<Patient> findByUnityId(Long unityId)
+    }
+    
+    interface UnityRepository {
+        + List<Unity> findAll()
+        + Optional<Unity> findById(Long id)
+        + Unity save(Unity unity)
+        + void deleteById(Long id)
     }
     
     interface UserRepository {
@@ -260,6 +418,29 @@ package "Repository" <<Data Access>> {
         + List<CurrentMedication> findByPatientId(Long patientId)
         + List<CurrentMedication> findByPatientIdOrderByStartDateDesc(Long patientId)
     }
+    
+    interface CID10Repository {
+        + List<CID10> findAll()
+        + Optional<CID10> findById(Long id)
+        + CID10 save(CID10 cid10)
+        + void deleteById(Long id)
+    }
+    
+    interface SpecialtyRepository {
+        + List<Specialty> findAll()
+        + Optional<Specialty> findById(Long id)
+        + Specialty save(Specialty specialty)
+        + void deleteById(Long id)
+    }
+    
+    interface ClinicalEvolutionRepository {
+        + List<ClinicalEvolution> findAll()
+        + Optional<ClinicalEvolution> findById(Long id)
+        + ClinicalEvolution save(ClinicalEvolution clinicalEvolution)
+        + void deleteById(Long id)
+        + List<ClinicalEvolution> findByPatientId(Long patientId)
+        + List<ClinicalEvolution> findByPatientIdOrderByAppointmentDateDesc(Long patientId)
+    }
 }
 
 package "Controller" <<API Layer>> {
@@ -271,6 +452,16 @@ package "Controller" <<API Layer>> {
         + ResponseEntity<Patient> createPatient(PatientRequestDTO patientDTO)
         + ResponseEntity<Patient> updatePatient(Long id, PatientRequestDTO patientDTO)
         + ResponseEntity<Void> deletePatient(Long id)
+        + ResponseEntity<List<Patient>> getPatientsByUnity(Long unityId)
+    }
+    
+    class UnityController {
+        - UnityRepository unityRepository
+        + ResponseEntity<List<Unity>> getAllUnities()
+        + ResponseEntity<Unity> getUnityById(Long id)
+        + ResponseEntity<Unity> createUnity(UnityRequestDTO unityDTO)
+        + ResponseEntity<Unity> updateUnity(Long id, UnityRequestDTO unityDTO)
+        + ResponseEntity<Void> deleteUnity(Long id)
     }
     
     class AuthController {
@@ -327,6 +518,38 @@ package "Controller" <<API Layer>> {
         + ResponseEntity<CurrentMedicationResponseDTO> updateCurrentMedication(Long id, CurrentMedicationRequestDTO medicationDTO)
         + ResponseEntity<Void> deleteCurrentMedication(Long id)
     }
+    
+    class CID10Controller {
+        - CID10Repository cid10Repository
+        + ResponseEntity<List<CID10>> getAllCID10()
+        + ResponseEntity<CID10> getCID10ById(Long id)
+        + ResponseEntity<CID10> createCID10(CID10RequestDTO cid10DTO)
+        + ResponseEntity<CID10> updateCID10(Long id, CID10RequestDTO cid10DTO)
+        + ResponseEntity<Void> deleteCID10(Long id)
+    }
+    
+    class SpecialtyController {
+        - SpecialtyRepository specialtyRepository
+        + ResponseEntity<List<Specialty>> getAllSpecialties()
+        + ResponseEntity<Specialty> getSpecialtyById(Long id)
+        + ResponseEntity<Specialty> createSpecialty(SpecialtyRequestDTO specialtyDTO)
+        + ResponseEntity<Specialty> updateSpecialty(Long id, SpecialtyRequestDTO specialtyDTO)
+        + ResponseEntity<Void> deleteSpecialty(Long id)
+    }
+    
+    class ClinicalEvolutionController {
+        - ClinicalEvolutionRepository clinicalEvolutionRepository
+        - PatientRepository patientRepository
+        - DoctorRepository doctorRepository
+        - CID10Repository cid10Repository
+        - SpecialtyRepository specialtyRepository
+        - UserRepository userRepository
+        + ResponseEntity<List<ClinicalEvolutionResponseDTO>> getClinicalEvolutionsByPatient(Long patientId)
+        + ResponseEntity<ClinicalEvolutionResponseDTO> getClinicalEvolutionById(Long id)
+        + ResponseEntity<ClinicalEvolutionResponseDTO> createClinicalEvolution(ClinicalEvolutionRequestDTO evolutionDTO)
+        + ResponseEntity<ClinicalEvolutionResponseDTO> updateClinicalEvolution(Long id, ClinicalEvolutionRequestDTO evolutionDTO)
+        + ResponseEntity<Void> deleteClinicalEvolution(Long id)
+    }
 }
 
 package "Service" <<Business Logic>> {
@@ -370,6 +593,11 @@ package "Security" <<Authentication>> {
 ' Relações entre as classes
 PatientController ..> PatientRepository : uses
 PatientController ..> PatientRequestDTO : uses
+PatientController ..> PatientResponseDTO : uses
+
+UnityController ..> UnityRepository : uses
+UnityController ..> UnityRequestDTO : uses
+UnityController ..> UnityResponseDTO : uses
 
 AuthController ..> AuthService : uses
 AuthService ..> UserRepository : uses
@@ -397,12 +625,30 @@ CurrentMedicationController ..> DoctorRepository : uses
 CurrentMedicationController ..> CurrentMedicationRequestDTO : uses
 CurrentMedicationController ..> CurrentMedicationResponseDTO : uses
 
+CID10Controller ..> CID10Repository : uses
+CID10Controller ..> CID10RequestDTO : uses
+CID10Controller ..> CID10ResponseDTO : uses
+
+SpecialtyController ..> SpecialtyRepository : uses
+SpecialtyController ..> SpecialtyRequestDTO : uses
+SpecialtyController ..> SpecialtyResponseDTO : uses
+
+ClinicalEvolutionController ..> ClinicalEvolutionRepository : uses
+ClinicalEvolutionController ..> PatientRepository : uses
+ClinicalEvolutionController ..> DoctorRepository : uses
+ClinicalEvolutionController ..> CID10Repository : uses
+ClinicalEvolutionController ..> SpecialtyRepository : uses
+ClinicalEvolutionController ..> UserRepository : uses
+ClinicalEvolutionController ..> ClinicalEvolutionRequestDTO : uses
+ClinicalEvolutionController ..> ClinicalEvolutionResponseDTO : uses
+
 SecurityConfig ..> JwtAuthenticationFilter : uses
 JwtAuthenticationFilter ..> JwtUtil : uses
 JwtAuthenticationFilter ..> CustomUserDetailsService : uses
 CustomUserDetailsService ..> UserRepository : uses
 
 ' Relações de composição
+Patient "1" --> "1" Unity : belongs to
 ExamResult "1" --> "1" Patient : belongs to
 ExamResult "1" --> "1" Exam : belongs to
 
@@ -410,13 +656,23 @@ CurrentMedication "1" --> "1" Patient : belongs to
 CurrentMedication "1" --> "1" Medication : belongs to
 CurrentMedication "0..1" --> "1" Doctor : prescribed by
 
+ClinicalEvolution "1" --> "1" Patient : belongs to
+ClinicalEvolution "0..1" --> "1" Doctor : registered by
+ClinicalEvolution "0..1" --> "1" CID10 : classified by
+ClinicalEvolution "0..1" --> "1" Specialty : related to
+ClinicalEvolution "0..1" --> "1" User : created by
+
 ' Relações de herança (JPA repositories)
 PatientRepository -|> JpaRepository
+UnityRepository -|> JpaRepository
 UserRepository -|> JpaRepository
 ExamRepository -|> JpaRepository
 ExamResultRepository -|> JpaRepository
 MedicationRepository -|> JpaRepository
 DoctorRepository -|> JpaRepository
 CurrentMedicationRepository -|> JpaRepository
+CID10Repository -|> JpaRepository
+SpecialtyRepository -|> JpaRepository
+ClinicalEvolutionRepository -|> JpaRepository
 
 @enduml

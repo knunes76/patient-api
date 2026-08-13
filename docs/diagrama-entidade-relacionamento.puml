@@ -1,18 +1,12 @@
-@startuml Diagrama de Entidade e Relacionamento - Sistema de Gestão de Pacientes
-
-' Configurações do diagrama
-skinparam entity {
-    BackgroundColor<<white>>
-    BorderColor<<black>>
-    ArrowColor<<black>>
-}
-skinparam linetype ortho
-skinparam shadowing false
-
+@startuml
 !define PRIMARY_KEY PK
 !define FOREIGN_KEY FK
 !define NOT_NULL NN
 !define UNIQUE UNQ
+
+skinparam linetype ortho
+skinparam shadowing false
+skinparam classAttributeIconSize 0
 
 ' Entidades do banco de dados
 
@@ -34,6 +28,16 @@ entity "patients" <<table>> {
   allergies : VARCHAR(500)
   emergency_contact : VARCHAR(20)
   emergency_phone : VARCHAR(11)
+  *unity_id : BIGINT <<NN, FK>>
+  created_by : BIGINT <<FK>>
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+entity "unity" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *name : VARCHAR(100) <<NN, UNQ>>
   created_at : TIMESTAMP <<NN>>
   updated_at : TIMESTAMP <<NN>>
 }
@@ -68,6 +72,7 @@ entity "result_exams" <<table>> {
   *result_date : DATE <<NN>>
   *result_value : VARCHAR(500) <<NN>>
   notes : VARCHAR(500)
+  created_by : BIGINT <<FK>>
   created_at : TIMESTAMP <<NN>>
   updated_at : TIMESTAMP <<NN>>
 }
@@ -103,38 +108,70 @@ entity "current_medication" <<table>> {
   *start_date : DATE <<NN>>
   *dosage : VARCHAR(500) <<NN>>
   notes : VARCHAR(500)
+  created_by : BIGINT <<FK>>
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+entity "cid10" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *code : VARCHAR(10) <<NN, UNQ>>
+  *description : VARCHAR(500) <<NN>>
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+entity "specialty" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *name : VARCHAR(100) <<NN, UNQ>>
+  description : VARCHAR(200)
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+entity "clinical_evolution" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *patient_id : BIGINT <<NN, FK>>
+  doctor_id : BIGINT <<FK>>
+  cid10_id : BIGINT <<FK>>
+  specialty_id : BIGINT <<FK>>
+  created_by : BIGINT <<FK>>
+  *appointment_date : DATE <<NN>>
+  *complaint : VARCHAR(1000) <<NN>>
+  diagnosis : VARCHAR(1000)
+  consultation_type : VARCHAR(20)
+  subject : VARCHAR(200)
   created_at : TIMESTAMP <<NN>>
   updated_at : TIMESTAMP <<NN>>
 }
 
 ' Relacionamentos
 
-' Um paciente pode ter vários resultados de exames
-"patients" ||--o{ "result_exams" : "tem (1:N)"
-
-' Um paciente pode ter vários medicamentos em uso
-"patients" ||--o{ "current_medication" : "usa (1:N)"
-
-' Um tipo de exame pode ter vários resultados
-"exams" ||--o{ "result_exams" : "tem resultados (1:N)"
-
-' Um medicamento pode estar em uso por vários pacientes
-"medications" ||--o{ "current_medication" : "prescrito para (1:N)"
-
-' Um médico pode prescrever vários medicamentos
-"doctors" ||--o{ "current_medication" : "prescreve (1:N)"
-
-' Um usuário pode gerenciar o sistema (relação conceptual)
-"users" ||--o{ "patients" : "gerencia (1:N)"
+"unity" ||--o{ "patients" : "contains (1:N)"
+"patients" ||--o{ "result_exams" : "has (1:N)"
+"patients" ||--o{ "current_medication" : "uses (1:N)"
+"patients" ||--o{ "clinical_evolution" : "has (1:N)"
+"exams" ||--o{ "result_exams" : "has results (1:N)"
+"medications" ||--o{ "current_medication" : "prescribed for (1:N)"
+"doctors" ||--o{ "current_medication" : "prescribes (1:N)"
+"doctors" ||--o{ "clinical_evolution" : "registers (1:N)"
+"cid10" ||--o{ "clinical_evolution" : "classifies (1:N)"
+"specialty" ||--o{ "clinical_evolution" : "related to (1:N)"
+"users" ||--o{ "patients" : "creates (1:N)"
+"users" ||--o{ "result_exams" : "creates (1:N)"
+"users" ||--o{ "current_medication" : "creates (1:N)"
+"users" ||--o{ "clinical_evolution" : "creates (1:N)"
 
 legend
-  <<PK>> = Primary Key (Chave Primária)
-  <<FK>> = Foreign Key (Chave Estrangeira)
-  <<NN>> = Not Null (Não Nulo)
-  <<UNQ>> = Unique (Único)
+  <<PK>> = Primary Key
+  <<FK>> = Foreign Key
+  <<NN>> = Not Null
+  <<UNQ>> = Unique
 endlegend
 
-title Diagrama de Entidade e Relacionamento (DER)
-Sistema de Gestão de Pacientes - EBSERH
+title Entity-Relationship Diagram (DER) - Patient Management System - EBSERH - Version 2.0
 
 @enduml
