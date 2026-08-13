@@ -52,7 +52,6 @@ public class PatientRequestDTO {
     @Size(max = 20, message = "Emergency contact must not exceed 20 characters")
     private String emergencyContact;
 
-    @Pattern(regexp = "\\d{10,11}", message = "Emergency phone must be 10 or 11 digits")
     private String emergencyPhone;
 
     public PatientRequestDTO() {

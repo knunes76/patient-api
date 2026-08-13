@@ -54,7 +54,7 @@ services:
       dockerfile: Dockerfile
     container_name: patient-api-frontend
     ports:
-      - "5173:80"
+      - "8082:80"
     depends_on:
       - backend
     networks:

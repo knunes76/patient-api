@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import './PatientForm.css';
 
 const PatientForm = ({ patient, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -108,33 +107,44 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
   };
 
   return (
-    <div className="patient-form-container">
-      <div className="patient-form-header">
-        <h1>{patient ? 'Editar Paciente' : 'Adicionar Novo Paciente'}</h1>
-        <button className="btn btn-secondary" onClick={onCancel}>
+    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">
+          {patient ? 'Editar Paciente' : 'Adicionar Novo Paciente'}
+        </h1>
+        <button
+          onClick={onCancel}
+          className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition font-medium"
+        >
           Cancelar
         </button>
       </div>
 
-      <form className="patient-form" onSubmit={handleSubmit}>
-        <div className="form-section">
-          <h3>Informações Básicas</h3>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="name">Nome *</label>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="bg-gray-50 p-6 rounded-lg">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">Informações Básicas</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                Nome *
+              </label>
               <input
                 type="text"
                 id="name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={errors.name ? 'error' : ''}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition ${
+                  errors.name ? 'border-red-500' : 'border-gray-300'
+                }`}
               />
-              {errors.name && <span className="error-message">{errors.name}</span>}
+              {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
             </div>
 
-            <div className="form-group">
-              <label htmlFor="cpf">CPF *</label>
+            <div>
+              <label htmlFor="cpf" className="block text-sm font-medium text-gray-700 mb-2">
+                CPF *
+              </label>
               <input
                 type="text"
                 id="cpf"
@@ -142,28 +152,34 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
                 value={formData.cpf}
                 onChange={handleChange}
                 placeholder="12345678901"
-                className={errors.cpf ? 'error' : ''}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition ${
+                  errors.cpf ? 'border-red-500' : 'border-gray-300'
+                }`}
               />
-              {errors.cpf && <span className="error-message">{errors.cpf}</span>}
+              {errors.cpf && <p className="text-red-600 text-sm mt-1">{errors.cpf}</p>}
             </div>
-          </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="email">Email *</label>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email *
+              </label>
               <input
                 type="email"
                 id="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={errors.email ? 'error' : ''}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition ${
+                  errors.email ? 'border-red-500' : 'border-gray-300'
+                }`}
               />
-              {errors.email && <span className="error-message">{errors.email}</span>}
+              {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
             </div>
 
-            <div className="form-group">
-              <label htmlFor="phone">Telefone *</label>
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                Telefone *
+              </label>
               <input
                 type="text"
                 id="phone"
@@ -171,33 +187,40 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="11987654321"
-                className={errors.phone ? 'error' : ''}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition ${
+                  errors.phone ? 'border-red-500' : 'border-gray-300'
+                }`}
               />
-              {errors.phone && <span className="error-message">{errors.phone}</span>}
+              {errors.phone && <p className="text-red-600 text-sm mt-1">{errors.phone}</p>}
             </div>
-          </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="birthDate">Data de Nascimento *</label>
+            <div>
+              <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700 mb-2">
+                Data de Nascimento *
+              </label>
               <input
                 type="date"
                 id="birthDate"
                 name="birthDate"
                 value={formData.birthDate}
                 onChange={handleChange}
-                className={errors.birthDate ? 'error' : ''}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition ${
+                  errors.birthDate ? 'border-red-500' : 'border-gray-300'
+                }`}
               />
-              {errors.birthDate && <span className="error-message">{errors.birthDate}</span>}
+              {errors.birthDate && <p className="text-red-600 text-sm mt-1">{errors.birthDate}</p>}
             </div>
 
-            <div className="form-group">
-              <label htmlFor="gender">Gênero</label>
+            <div>
+              <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-2">
+                Gênero
+              </label>
               <select
                 id="gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
               >
                 <option value="">Selecione</option>
                 <option value="Masculino">Masculino</option>
@@ -208,67 +231,84 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
           </div>
         </div>
 
-        <div className="form-section">
-          <h3>Informações de Endereço</h3>
-          <div className="form-group">
-            <label htmlFor="address">Endereço</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="city">Cidade</label>
+        <div className="bg-gray-50 p-6 rounded-lg">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">Informações de Endereço</h3>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
+                Endereço
+              </label>
               <input
                 type="text"
-                id="city"
-                name="city"
-                value={formData.city}
+                id="address"
+                name="address"
+                value={formData.address}
                 onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="state">Estado</label>
-              <input
-                type="text"
-                id="state"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                placeholder="SP"
-                maxLength="2"
-              />
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+                  Cidade
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="zipCode">CEP</label>
-              <input
-                type="text"
-                id="zipCode"
-                name="zipCode"
-                value={formData.zipCode}
-                onChange={handleChange}
-              />
+              <div>
+                <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">
+                  Estado
+                </label>
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  placeholder="SP"
+                  maxLength="2"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-2">
+                  CEP
+                </label>
+                <input
+                  type="text"
+                  id="zipCode"
+                  name="zipCode"
+                  value={formData.zipCode}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="form-section">
-          <h3>Informações Médicas</h3>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="bloodType">Tipo Sanguíneo</label>
+        <div className="bg-gray-50 p-6 rounded-lg">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">Informações Médicas</h3>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="bloodType" className="block text-sm font-medium text-gray-700 mb-2">
+                Tipo Sanguíneo
+              </label>
               <select
                 id="bloodType"
                 name="bloodType"
                 value={formData.bloodType}
                 onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
               >
                 <option value="">Selecione</option>
                 <option value="A+">A+</option>
@@ -281,47 +321,58 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
                 <option value="O-">O-</option>
               </select>
             </div>
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="allergies">Alergias</label>
-            <textarea
-              id="allergies"
-              name="allergies"
-              value={formData.allergies}
-              onChange={handleChange}
-              rows="3"
-            />
-          </div>
+            <div>
+              <label htmlFor="allergies" className="block text-sm font-medium text-gray-700 mb-2">
+                Alergias
+              </label>
+              <textarea
+                id="allergies"
+                name="allergies"
+                value={formData.allergies}
+                onChange={handleChange}
+                rows="3"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="medicalHistory">Histórico Médico</label>
-            <textarea
-              id="medicalHistory"
-              name="medicalHistory"
-              value={formData.medicalHistory}
-              onChange={handleChange}
-              rows="3"
-            />
+            <div>
+              <label htmlFor="medicalHistory" className="block text-sm font-medium text-gray-700 mb-2">
+                Histórico Médico
+              </label>
+              <textarea
+                id="medicalHistory"
+                name="medicalHistory"
+                value={formData.medicalHistory}
+                onChange={handleChange}
+                rows="3"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="form-section">
-          <h3>Contato de Emergência</h3>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="emergencyContact">Nome do Contato</label>
+        <div className="bg-gray-50 p-6 rounded-lg">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">Contato de Emergência</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="emergencyContact" className="block text-sm font-medium text-gray-700 mb-2">
+                Nome do Contato
+              </label>
               <input
                 type="text"
                 id="emergencyContact"
                 name="emergencyContact"
                 value={formData.emergencyContact}
                 onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="emergencyPhone">Telefone do Contato</label>
+            <div>
+              <label htmlFor="emergencyPhone" className="block text-sm font-medium text-gray-700 mb-2">
+                Telefone do Contato
+              </label>
               <input
                 type="text"
                 id="emergencyPhone"
@@ -329,16 +380,24 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
                 value={formData.emergencyPhone}
                 onChange={handleChange}
                 placeholder="11987654321"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
               />
             </div>
           </div>
         </div>
 
-        <div className="form-actions">
-          <button type="button" className="btn btn-secondary" onClick={onCancel}>
+        <div className="flex justify-end gap-4">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition font-medium"
+          >
             Cancelar
           </button>
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition font-medium"
+          >
             {patient ? 'Atualizar Paciente' : 'Criar Paciente'}
           </button>
         </div>

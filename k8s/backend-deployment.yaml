@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: patient-api
-        image: patient-api:latest
+        image: ebserh-backend:v2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8081
