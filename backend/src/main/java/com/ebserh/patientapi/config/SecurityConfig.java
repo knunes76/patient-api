@@ -47,6 +47,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/cid10/**").permitAll()
                 .requestMatchers("/api/specialty/**").permitAll()
                 .requestMatchers("/api/clinical-evolution/**").permitAll()
+                .requestMatchers("/api/unity/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/swagger-ui/index.html").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/api-docs/**").permitAll()

@@ -86,6 +86,17 @@ public class PatientController {
         return ResponseEntity.ok(patients);
     }
 
+    @GetMapping("/unity/{unityId}")
+    @Operation(summary = "Get patients by unity", description = "Retrieves patients filtered by unity")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Patients retrieved successfully")
+    })
+    public ResponseEntity<List<PatientResponseDTO>> getPatientsByUnity(
+            @Parameter(description = "Unity ID") @PathVariable Long unityId) {
+        List<PatientResponseDTO> patients = patientService.getPatientsByUnity(unityId);
+        return ResponseEntity.ok(patients);
+    }
+
     @PutMapping("/{id}")
     @Operation(summary = "Update patient", description = "Updates an existing patient's information")
     @ApiResponses(value = {

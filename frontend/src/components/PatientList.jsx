@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import patientApi from '../api/patientApi';
 import PatientForm from './PatientForm';
+import { useUnity } from '../context/UnityContext';
 
 const PatientList = () => {
   const navigate = useNavigate();
+  const { selectedUnity } = useUnity();
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,10 +15,19 @@ const PatientList = () => {
   const [viewingPatient, setViewingPatient] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
+  useEffect(() => {
+    fetchPatients();
+  }, [selectedUnity]);
+
   const fetchPatients = async (page = 0) => {
     try {
       setLoading(true);
-      const data = await patientApi.getAllPatients();
+      let data;
+      if (selectedUnity) {
+        data = await patientApi.getPatientsByUnity(selectedUnity.id);
+      } else {
+        data = await patientApi.getAllPatients();
+      }
       setPatients(data);
       setError(null);
     } catch (err) {

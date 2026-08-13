@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { UnityProvider } from './context/UnityContext';
 import Login from './components/Login';
 import Layout from './components/Layout';
 import PatientList from './components/PatientList';
@@ -55,9 +56,11 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <UnityProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </UnityProvider>
     </AuthProvider>
   );
 }

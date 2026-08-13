@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useUnity } from '../context/UnityContext';
 
 const PatientForm = ({ patient, onSubmit, onCancel }) => {
+  const { unities, selectedUnity } = useUnity();
   const [formData, setFormData] = useState({
     name: '',
     cpf: '',
@@ -16,7 +18,8 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
     allergies: '',
     medicalHistory: '',
     emergencyContact: '',
-    emergencyPhone: ''
+    emergencyPhone: '',
+    unityId: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -38,7 +41,8 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
         allergies: patient.allergies || '',
         medicalHistory: patient.medicalHistory || '',
         emergencyContact: patient.emergencyContact || '',
-        emergencyPhone: patient.emergencyPhone || ''
+        emergencyPhone: patient.emergencyPhone || '',
+        unityId: patient.unityId || selectedUnity?.id || ''
       });
     }
   }, [patient]);
@@ -192,6 +196,27 @@ const PatientForm = ({ patient, onSubmit, onCancel }) => {
                 }`}
               />
               {errors.phone && <p className="text-red-600 text-sm mt-1">{errors.phone}</p>}
+            </div>
+
+            <div>
+              <label htmlFor="unityId" className="block text-sm font-medium text-gray-700 mb-2">
+                Unidade *
+              </label>
+              <select
+                id="unityId"
+                name="unityId"
+                value={formData.unityId}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                required
+              >
+                <option value="">Selecione uma unidade</option>
+                {unities.map((unity) => (
+                  <option key={unity.id} value={unity.id}>
+                    {unity.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>

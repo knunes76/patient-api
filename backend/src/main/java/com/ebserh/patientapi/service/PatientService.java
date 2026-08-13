@@ -3,9 +3,11 @@ package com.ebserh.patientapi.service;
 import com.ebserh.patientapi.exception.ResourceAlreadyExistsException;
 import com.ebserh.patientapi.exception.ResourceNotFoundException;
 import com.ebserh.patientapi.model.Patient;
+import com.ebserh.patientapi.model.Unity;
 import com.ebserh.patientapi.model.dto.PatientRequestDTO;
 import com.ebserh.patientapi.model.dto.PatientResponseDTO;
 import com.ebserh.patientapi.repository.PatientRepository;
+import com.ebserh.patientapi.repository.UnityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,10 +22,12 @@ import java.util.stream.Collectors;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final UnityRepository unityRepository;
 
     @Autowired
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, UnityRepository unityRepository) {
         this.patientRepository = patientRepository;
+        this.unityRepository = unityRepository;
     }
 
     public PatientResponseDTO createPatient(PatientRequestDTO patientDTO) {
@@ -35,7 +39,11 @@ public class PatientService {
             throw new ResourceAlreadyExistsException("Patient with email " + patientDTO.getEmail() + " already exists");
         }
 
+        Unity unity = unityRepository.findById(patientDTO.getUnityId())
+                .orElseThrow(() -> new ResourceNotFoundException("Unity not found with id: " + patientDTO.getUnityId()));
+
         Patient patient = convertToEntity(patientDTO);
+        patient.setUnity(unity);
         Patient savedPatient = patientRepository.save(patient);
         return convertToDTO(savedPatient);
     }
@@ -77,7 +85,11 @@ public class PatientService {
             throw new ResourceAlreadyExistsException("Patient with email " + patientDTO.getEmail() + " already exists");
         }
 
+        Unity unity = unityRepository.findById(patientDTO.getUnityId())
+                .orElseThrow(() -> new ResourceNotFoundException("Unity not found with id: " + patientDTO.getUnityId()));
+
         updateEntityFromDTO(existingPatient, patientDTO);
+        existingPatient.setUnity(unity);
         Patient updatedPatient = patientRepository.save(existingPatient);
         return convertToDTO(updatedPatient);
     }
@@ -91,6 +103,12 @@ public class PatientService {
 
     public List<PatientResponseDTO> searchPatientsByName(String name) {
         return patientRepository.findByNameContainingIgnoreCase(name).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<PatientResponseDTO> getPatientsByUnity(Long unityId) {
+        return patientRepository.findByUnityId(unityId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -112,6 +130,7 @@ public class PatientService {
         patient.setMedicalHistory(dto.getMedicalHistory());
         patient.setEmergencyContact(dto.getEmergencyContact());
         patient.setEmergencyPhone(dto.getEmergencyPhone());
+        // Unity is set in the calling method
         return patient;
     }
 
@@ -135,6 +154,10 @@ public class PatientService {
         dto.setEmergencyPhone(patient.getEmergencyPhone());
         dto.setCreatedAt(patient.getCreatedAt());
         dto.setUpdatedAt(patient.getUpdatedAt());
+        if (patient.getUnity() != null) {
+            dto.setUnityId(patient.getUnity().getId());
+            dto.setUnityName(patient.getUnity().getName());
+        }
         return dto;
     }
 

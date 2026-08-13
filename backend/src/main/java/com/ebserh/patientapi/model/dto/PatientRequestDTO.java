@@ -54,6 +54,9 @@ public class PatientRequestDTO {
 
     private String emergencyPhone;
 
+    @NotNull(message = "Unity is required")
+    private Long unityId;
+
     public PatientRequestDTO() {
     }
 
@@ -175,5 +178,13 @@ public class PatientRequestDTO {
 
     public void setEmergencyPhone(String emergencyPhone) {
         this.emergencyPhone = emergencyPhone;
+    }
+
+    public Long getUnityId() {
+        return unityId;
+    }
+
+    public void setUnityId(Long unityId) {
+        this.unityId = unityId;
     }
 }

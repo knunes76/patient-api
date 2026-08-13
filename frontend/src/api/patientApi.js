@@ -8,6 +8,11 @@ const patientApi = {
     return response.data;
   },
 
+  getPatientsByUnity: async (unityId) => {
+    const response = await api.get(`${API_BASE_URL}/unity/${unityId}`);
+    return response.data;
+  },
+
   getPatientById: async (id) => {
     const response = await api.get(`${API_BASE_URL}/${id}`);
     return response.data;

@@ -84,6 +84,11 @@ public class Patient {
     @JsonIgnore
     private User createdBy;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "unity_id", nullable = false)
+    @JsonIgnore
+    private Unity unity;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -256,5 +261,13 @@ public class Patient {
 
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public Unity getUnity() {
+        return unity;
+    }
+
+    public void setUnity(Unity unity) {
+        this.unity = unity;
     }
 }

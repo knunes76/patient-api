@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useUnity } from '../context/UnityContext';
 import { 
   Users, 
   FileText, 
@@ -8,11 +9,13 @@ import {
   LogOut, 
   Menu, 
   X,
-  HeartPulse
+  HeartPulse,
+  Building2
 } from 'lucide-react';
 
 const Layout = ({ children, title }) => {
   const { user, logout } = useAuth();
+  const { unities, selectedUnity, selectUnity, loading } = useUnity();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -84,6 +87,32 @@ const Layout = ({ children, title }) => {
                 <p className="text-xs text-gray-500">{user?.role}</p>
               </div>
             </div>
+          </div>
+
+          {/* Unity Selector */}
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-center space-x-2 mb-2">
+              <Building2 size={16} className="text-gray-600" />
+              <span className="text-sm font-medium text-gray-700">Unidade</span>
+            </div>
+            {loading ? (
+              <div className="text-sm text-gray-500">Carregando...</div>
+            ) : (
+              <select
+                value={selectedUnity?.id || ''}
+                onChange={(e) => {
+                  const unity = unities.find(u => u.id === parseInt(e.target.value));
+                  if (unity) selectUnity(unity);
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                {unities.map((unity) => (
+                  <option key={unity.id} value={unity.id}>
+                    {unity.name}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
 
           {/* Navigation */}

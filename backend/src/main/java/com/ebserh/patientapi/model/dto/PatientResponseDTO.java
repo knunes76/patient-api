@@ -21,6 +21,8 @@ public class PatientResponseDTO {
     private String medicalHistory;
     private String emergencyContact;
     private String emergencyPhone;
+    private Long unityId;
+    private String unityName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -153,6 +155,22 @@ public class PatientResponseDTO {
 
     public void setEmergencyPhone(String emergencyPhone) {
         this.emergencyPhone = emergencyPhone;
+    }
+
+    public Long getUnityId() {
+        return unityId;
+    }
+
+    public void setUnityId(Long unityId) {
+        this.unityId = unityId;
+    }
+
+    public String getUnityName() {
+        return unityName;
+    }
+
+    public void setUnityName(String unityName) {
+        this.unityName = unityName;
     }
 
     public LocalDateTime getCreatedAt() {
