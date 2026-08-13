@@ -1,0 +1,140 @@
+@startuml Diagrama de Entidade e Relacionamento - Sistema de Gestão de Pacientes
+
+' Configurações do diagrama
+skinparam entity {
+    BackgroundColor<<white>>
+    BorderColor<<black>>
+    ArrowColor<<black>>
+}
+skinparam linetype ortho
+skinparam shadowing false
+
+!define PRIMARY_KEY PK
+!define FOREIGN_KEY FK
+!define NOT_NULL NN
+!define UNIQUE UNQ
+
+' Entidades do banco de dados
+
+entity "patients" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *name : VARCHAR(100) <<NN>>
+  *cpf : VARCHAR(11) <<NN, UNQ>>
+  *email : VARCHAR(100) <<NN, UNQ>>
+  *phone : VARCHAR(11) <<NN>>
+  *birth_date : DATE <<NN>>
+  gender : VARCHAR(20)
+  blood_type : VARCHAR(20)
+  address : VARCHAR(200)
+  city : VARCHAR(100)
+  state : VARCHAR(2)
+  zip_code : VARCHAR(10)
+  medical_history : VARCHAR(500)
+  allergies : VARCHAR(500)
+  emergency_contact : VARCHAR(20)
+  emergency_phone : VARCHAR(11)
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+entity "users" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *username : VARCHAR(50) <<NN, UNQ>>
+  *password : VARCHAR(255) <<NN>>
+  *email : VARCHAR(100) <<NN, UNQ>>
+  full_name : VARCHAR(100) <<NN>>
+  role : VARCHAR(20) <<NN>>
+  is_active : BOOLEAN <<NN>>
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+entity "exams" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *name : VARCHAR(100) <<NN, UNQ>>
+  description : VARCHAR(200)
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+entity "result_exams" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *patient_id : BIGINT <<NN, FK>>
+  *exam_id : BIGINT <<NN, FK>>
+  *result_date : DATE <<NN>>
+  *result_value : VARCHAR(500) <<NN>>
+  notes : VARCHAR(500)
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+entity "medications" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *name : VARCHAR(100) <<NN, UNQ>>
+  description : VARCHAR(200)
+  dosage_form : VARCHAR(50)
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+entity "doctors" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *name : VARCHAR(100) <<NN>>
+  *crm : VARCHAR(20) <<NN, UNQ>>
+  specialty : VARCHAR(100)
+  phone : VARCHAR(20)
+  email : VARCHAR(100)
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+entity "current_medication" <<table>> {
+  *id : BIGINT <<PK>>
+  --
+  *patient_id : BIGINT <<NN, FK>>
+  *medication_id : BIGINT <<NN, FK>>
+  doctor_id : BIGINT <<FK>>
+  *start_date : DATE <<NN>>
+  *dosage : VARCHAR(500) <<NN>>
+  notes : VARCHAR(500)
+  created_at : TIMESTAMP <<NN>>
+  updated_at : TIMESTAMP <<NN>>
+}
+
+' Relacionamentos
+
+' Um paciente pode ter vários resultados de exames
+"patients" ||--o{ "result_exams" : "tem (1:N)"
+
+' Um paciente pode ter vários medicamentos em uso
+"patients" ||--o{ "current_medication" : "usa (1:N)"
+
+' Um tipo de exame pode ter vários resultados
+"exams" ||--o{ "result_exams" : "tem resultados (1:N)"
+
+' Um medicamento pode estar em uso por vários pacientes
+"medications" ||--o{ "current_medication" : "prescrito para (1:N)"
+
+' Um médico pode prescrever vários medicamentos
+"doctors" ||--o{ "current_medication" : "prescreve (1:N)"
+
+' Um usuário pode gerenciar o sistema (relação conceptual)
+"users" ||--o{ "patients" : "gerencia (1:N)"
+
+legend
+  <<PK>> = Primary Key (Chave Primária)
+  <<FK>> = Foreign Key (Chave Estrangeira)
+  <<NN>> = Not Null (Não Nulo)
+  <<UNQ>> = Unique (Único)
+endlegend
+
+title Diagrama de Entidade e Relacionamento (DER)
+Sistema de Gestão de Pacientes - EBSERH
+
+@enduml

@@ -1,0 +1,422 @@
+@startuml Diagrama de Classes - Sistema de Gestão de Pacientes
+
+' Configurações do diagrama
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam monochrome true
+skinparam shadowing false
+
+package "Model" <<Domain>> {
+    
+    class Patient {
+        - Long id
+        - String name
+        - String cpf
+        - String email
+        - String phone
+        - LocalDate birthDate
+        - String gender
+        - String bloodType
+        - String address
+        - String city
+        - String state
+        - String zipCode
+        - String medicalHistory
+        - String allergies
+        - String emergencyContact
+        - String emergencyPhone
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class User {
+        - Long id
+        - String username
+        - String password
+        - String email
+        - String fullName
+        - String role
+        - Boolean isActive
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class Exam {
+        - Long id
+        - String name
+        - String description
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class ExamResult {
+        - Long id
+        - Patient patient
+        - Exam exam
+        - LocalDate resultDate
+        - String resultValue
+        - String notes
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class Medication {
+        - Long id
+        - String name
+        - String description
+        - String dosageForm
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class Doctor {
+        - Long id
+        - String name
+        - String crm
+        - String specialty
+        - String phone
+        - String email
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class CurrentMedication {
+        - Long id
+        - Patient patient
+        - Medication medication
+        - Doctor doctor
+        - LocalDate startDate
+        - String dosage
+        - String notes
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+}
+
+package "DTO" <<Data Transfer>> {
+    
+    class PatientRequestDTO {
+        - String name
+        - String cpf
+        - String email
+        - String phone
+        - LocalDate birthDate
+        - String gender
+        - String bloodType
+        - String address
+        - String city
+        - String state
+        - String zipCode
+        - String medicalHistory
+        - String allergies
+        - String emergencyContact
+        - String emergencyPhone
+        + getters and setters
+    }
+    
+    class UserDTO {
+        - String username
+        - String email
+        - String fullName
+        - String role
+        - Boolean isActive
+        + getters and setters
+    }
+    
+    class ExamRequestDTO {
+        - String name
+        - String description
+        + getters and setters
+    }
+    
+    class ExamResultRequestDTO {
+        - Long patientId
+        - Long examId
+        - LocalDate resultDate
+        - String resultValue
+        - String notes
+        + getters and setters
+    }
+    
+    class ExamResultResponseDTO {
+        - Long id
+        - Long patientId
+        - String patientName
+        - Long examId
+        - String examName
+        - LocalDate resultDate
+        - String resultValue
+        - String notes
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+    
+    class MedicationRequestDTO {
+        - String name
+        - String description
+        - String dosageForm
+        + getters and setters
+    }
+    
+    class DoctorRequestDTO {
+        - String name
+        - String crm
+        - String specialty
+        - String phone
+        - String email
+        + getters and setters
+    }
+    
+    class CurrentMedicationRequestDTO {
+        - Long patientId
+        - Long medicationId
+        - Long doctorId
+        - LocalDate startDate
+        - String dosage
+        - String notes
+        + getters and setters
+    }
+    
+    class CurrentMedicationResponseDTO {
+        - Long id
+        - Long patientId
+        - String patientName
+        - Long medicationId
+        - String medicationName
+        - String medicationDosageForm
+        - Long doctorId
+        - String doctorName
+        - String doctorCrm
+        - LocalDate startDate
+        - String dosage
+        - String notes
+        - LocalDateTime createdAt
+        - LocalDateTime updatedAt
+        + getters and setters
+    }
+}
+
+package "Repository" <<Data Access>> {
+    
+    interface PatientRepository {
+        + List<Patient> findAll()
+        + Optional<Patient> findById(Long id)
+        + Patient save(Patient patient)
+        + void deleteById(Long id)
+        + Optional<Patient> findByCpf(String cpf)
+    }
+    
+    interface UserRepository {
+        + List<User> findAll()
+        + Optional<User> findById(Long id)
+        + User save(User user)
+        + void deleteById(Long id)
+        + Optional<User> findByUsername(String username)
+    }
+    
+    interface ExamRepository {
+        + List<Exam> findAll()
+        + Optional<Exam> findById(Long id)
+        + Exam save(Exam exam)
+        + void deleteById(Long id)
+    }
+    
+    interface ExamResultRepository {
+        + List<ExamResult> findAll()
+        + Optional<ExamResult> findById(Long id)
+        + ExamResult save(ExamResult examResult)
+        + void deleteById(Long id)
+        + List<ExamResult> findByPatientId(Long patientId)
+        + List<ExamResult> findByPatientIdOrderByResultDateDesc(Long patientId)
+    }
+    
+    interface MedicationRepository {
+        + List<Medication> findAll()
+        + Optional<Medication> findById(Long id)
+        - Medication save(Medication medication)
+        + void deleteById(Long id)
+    }
+    
+    interface DoctorRepository {
+        + List<Doctor> findAll()
+        + Optional<Doctor> findById(Long id)
+        + Doctor save(Doctor doctor)
+        + void deleteById(Long id)
+    }
+    
+    interface CurrentMedicationRepository {
+        + List<CurrentMedication> findAll()
+        + Optional<CurrentMedication> findById(Long id)
+        + CurrentMedication save(CurrentMedication currentMedication)
+        + void deleteById(Long id)
+        + List<CurrentMedication> findByPatientId(Long patientId)
+        + List<CurrentMedication> findByPatientIdOrderByStartDateDesc(Long patientId)
+    }
+}
+
+package "Controller" <<API Layer>> {
+    
+    class PatientController {
+        - PatientRepository patientRepository
+        + ResponseEntity<List<Patient>> getAllPatients()
+        + ResponseEntity<Patient> getPatientById(Long id)
+        + ResponseEntity<Patient> createPatient(PatientRequestDTO patientDTO)
+        + ResponseEntity<Patient> updatePatient(Long id, PatientRequestDTO patientDTO)
+        + ResponseEntity<Void> deletePatient(Long id)
+    }
+    
+    class AuthController {
+        - AuthService authService
+        + ResponseEntity<UserDTO> login(AuthRequestDTO authRequest)
+    }
+    
+    class ExamController {
+        - ExamRepository examRepository
+        + ResponseEntity<List<Exam>> getAllExams()
+        + ResponseEntity<Exam> getExamById(Long id)
+        + ResponseEntity<Exam> createExam(ExamRequestDTO examDTO)
+        + ResponseEntity<Exam> updateExam(Long id, ExamRequestDTO examDTO)
+        + ResponseEntity<Void> deleteExam(Long id)
+    }
+    
+    class ExamResultController {
+        - ExamResultRepository examResultRepository
+        - PatientRepository patientRepository
+        - ExamRepository examRepository
+        + ResponseEntity<List<ExamResultResponseDTO>> getExamResultsByPatient(Long patientId)
+        + ResponseEntity<ExamResultResponseDTO> getExamResultById(Long id)
+        + ResponseEntity<ExamResultResponseDTO> createExamResult(ExamResultRequestDTO examResultDTO)
+        + ResponseEntity<ExamResultResponseDTO> updateExamResult(Long id, ExamResultRequestDTO examResultDTO)
+        + ResponseEntity<Void> deleteExamResult(Long id)
+    }
+    
+    class MedicationController {
+        - MedicationRepository medicationRepository
+        + ResponseEntity<List<Medication>> getAllMedications()
+        + ResponseEntity<Medication> getMedicationById(Long id)
+        + ResponseEntity<Medication> createMedication(MedicationRequestDTO medicationDTO)
+        + ResponseEntity<Medication> updateMedication(Long id, MedicationRequestDTO medicationDTO)
+        + ResponseEntity<Void> deleteMedication(Long id)
+    }
+    
+    class DoctorController {
+        - DoctorRepository doctorRepository
+        + ResponseEntity<List<Doctor>> getAllDoctors()
+        + ResponseEntity<Doctor> getDoctorById(Long id)
+        + ResponseEntity<Doctor> createDoctor(DoctorRequestDTO doctorDTO)
+        + ResponseEntity<Doctor> updateDoctor(Long id, DoctorRequestDTO doctorDTO)
+        + ResponseEntity<Void> deleteDoctor(Long id)
+    }
+    
+    class CurrentMedicationController {
+        - CurrentMedicationRepository currentMedicationRepository
+        - PatientRepository patientRepository
+        - MedicationRepository medicationRepository
+        - DoctorRepository doctorRepository
+        + ResponseEntity<List<CurrentMedicationResponseDTO>> getCurrentMedicationsByPatient(Long patientId)
+        + ResponseEntity<CurrentMedicationResponseDTO> getCurrentMedicationById(Long id)
+        + ResponseEntity<CurrentMedicationResponseDTO> createCurrentMedication(CurrentMedicationRequestDTO medicationDTO)
+        + ResponseEntity<CurrentMedicationResponseDTO> updateCurrentMedication(Long id, CurrentMedicationRequestDTO medicationDTO)
+        + ResponseEntity<Void> deleteCurrentMedication(Long id)
+    }
+}
+
+package "Service" <<Business Logic>> {
+    
+    class AuthService {
+        - UserRepository userRepository
+        - JwtUtil jwtUtil
+        - UserDTO authenticate(String username, String password)
+        - String generateToken(User user)
+    }
+    
+    class JwtUtil {
+        - String secret
+        - long expiration
+        + String generateToken(UserDetails userDetails)
+        + Boolean validateToken(String token, UserDetails userDetails)
+        + String extractUsername(String token)
+    }
+}
+
+package "Security" <<Authentication>> {
+    
+    class SecurityConfig {
+        - JwtAuthenticationFilter jwtAuthenticationFilter
+        + void configure(HttpSecurity http)
+    }
+    
+    class JwtAuthenticationFilter {
+        - JwtUtil jwtUtil
+        - UserDetailsService userDetailsService
+        + void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+        + Boolean shouldNotFilter(HttpServletRequest request)
+    }
+    
+    class CustomUserDetailsService {
+        - UserRepository userRepository
+        + UserDetails loadUserByUsername(String username)
+    }
+}
+
+' Relações entre as classes
+PatientController ..> PatientRepository : uses
+PatientController ..> PatientRequestDTO : uses
+
+AuthController ..> AuthService : uses
+AuthService ..> UserRepository : uses
+AuthService ..> JwtUtil : uses
+
+ExamController ..> ExamRepository : uses
+ExamController ..> ExamRequestDTO : uses
+
+ExamResultController ..> ExamResultRepository : uses
+ExamResultController ..> PatientRepository : uses
+ExamResultController ..> ExamRepository : uses
+ExamResultController ..> ExamResultRequestDTO : uses
+ExamResultController ..> ExamResultResponseDTO : uses
+
+MedicationController ..> MedicationRepository : uses
+MedicationController ..> MedicationRequestDTO : uses
+
+DoctorController ..> DoctorRepository : uses
+DoctorController ..> DoctorRequestDTO : uses
+
+CurrentMedicationController ..> CurrentMedicationRepository : uses
+CurrentMedicationController ..> PatientRepository : uses
+CurrentMedicationController ..> MedicationRepository : uses
+CurrentMedicationController ..> DoctorRepository : uses
+CurrentMedicationController ..> CurrentMedicationRequestDTO : uses
+CurrentMedicationController ..> CurrentMedicationResponseDTO : uses
+
+SecurityConfig ..> JwtAuthenticationFilter : uses
+JwtAuthenticationFilter ..> JwtUtil : uses
+JwtAuthenticationFilter ..> CustomUserDetailsService : uses
+CustomUserDetailsService ..> UserRepository : uses
+
+' Relações de composição
+ExamResult "1" --> "1" Patient : belongs to
+ExamResult "1" --> "1" Exam : belongs to
+
+CurrentMedication "1" --> "1" Patient : belongs to
+CurrentMedication "1" --> "1" Medication : belongs to
+CurrentMedication "0..1" --> "1" Doctor : prescribed by
+
+' Relações de herança (JPA repositories)
+PatientRepository -|> JpaRepository
+UserRepository -|> JpaRepository
+ExamRepository -|> JpaRepository
+ExamResultRepository -|> JpaRepository
+MedicationRepository -|> JpaRepository
+DoctorRepository -|> JpaRepository
+CurrentMedicationRepository -|> JpaRepository
+
+@enduml
