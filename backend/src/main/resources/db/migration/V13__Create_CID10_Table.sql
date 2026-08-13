@@ -1,0 +1,7 @@
+CREATE TABLE cid10 (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(10) NOT NULL UNIQUE,
+    description VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);

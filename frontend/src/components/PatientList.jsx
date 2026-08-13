@@ -67,6 +67,10 @@ const PatientList = () => {
     navigate(`/patients/${patient.id}/medications`);
   };
 
+  const handleClinicalEvolution = (patient) => {
+    navigate(`/patients/${patient.id}/clinical-evolution`);
+  };
+
   const handleDelete = async (id) => {
     if (window.confirm('Tem certeza que deseja excluir este paciente?')) {
       try {
@@ -259,6 +263,12 @@ const PatientList = () => {
                           className="text-orange-600 hover:text-orange-800 font-medium"
                         >
                           Medicamentos
+                        </button>
+                        <button
+                          onClick={() => handleClinicalEvolution(patient)}
+                          className="text-teal-600 hover:text-teal-800 font-medium"
+                        >
+                          Evolução
                         </button>
                         <button
                           onClick={() => handleDelete(patient.id)}

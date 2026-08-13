@@ -1,0 +1,2 @@
+ALTER TABLE current_medication ADD COLUMN created_by BIGINT;
+ALTER TABLE current_medication ADD CONSTRAINT fk_current_medication_created_by FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL;

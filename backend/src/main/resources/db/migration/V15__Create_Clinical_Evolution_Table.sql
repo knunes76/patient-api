@@ -1,0 +1,20 @@
+CREATE TABLE clinical_evolution (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    patient_id BIGINT NOT NULL,
+    doctor_id BIGINT,
+    cid10_id BIGINT,
+    specialty_id BIGINT,
+    appointment_date DATE NOT NULL,
+    complaint VARCHAR(1000) NOT NULL,
+    diagnosis VARCHAR(1000),
+    consultation_type VARCHAR(20),
+    subject VARCHAR(200),
+    created_by BIGINT,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE SET NULL,
+    FOREIGN KEY (cid10_id) REFERENCES cid10(id) ON DELETE SET NULL,
+    FOREIGN KEY (specialty_id) REFERENCES specialty(id) ON DELETE SET NULL,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+);

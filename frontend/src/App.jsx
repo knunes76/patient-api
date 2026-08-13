@@ -7,6 +7,7 @@ import PatientList from './components/PatientList';
 import Tests from './components/Tests';
 import Exams from './components/modules/patients/Exams';
 import Medications from './components/modules/patients/Medications';
+import ClinicalEvolution from './components/modules/patients/ClinicalEvolution';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -33,6 +34,7 @@ function AppContent() {
     if (path === '/tests') return 'Testes';
     if (path.includes('/exams')) return 'Exames';
     if (path.includes('/medications')) return 'Medicamentos';
+    if (path.includes('/clinical-evolution')) return 'Evolução Clínica';
     return 'Sistema';
   };
 
@@ -42,6 +44,7 @@ function AppContent() {
         <Route path="/patients" element={<PatientList />} />
         <Route path="/patients/:patientId/exams" element={<Exams />} />
         <Route path="/patients/:patientId/medications" element={<Medications />} />
+        <Route path="/patients/:patientId/clinical-evolution" element={<ClinicalEvolution />} />
         <Route path="/tests" element={<Tests />} />
         <Route path="/" element={<PatientList />} />
       </Routes>
